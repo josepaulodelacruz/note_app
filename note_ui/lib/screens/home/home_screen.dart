@@ -5,7 +5,6 @@ import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_ui/utils/custom_snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -59,18 +58,7 @@ class HomeScreen extends StatelessWidget {
                   } else if(state is LoadedNoteState) {
                     return ListView(
                       children: state.notes?.map((note) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(note.title),
-                            subtitle: Text(note.description),
-                            trailing: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description));
-                                },
-                                icon: Icon(Icons.arrow_forward_ios)
-                            ),
-                          ),
-                        );
+                        return _noteCard(context, note);
                       })?.toList() ?? [],
                     );
                   } else {
@@ -87,16 +75,18 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _noteCard (BuildContext context) {
+  Widget _noteCard (BuildContext context, note) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       width: MediaQuery.of(context).size.width * 0.90,
       child: Card(
         child: ListTile(
-          title: Text('TESTING'),
-          subtitle: Text('Sub Title'),
+          title: Text(note.title),
+          subtitle: Text(note.description),
           trailing: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description));
+            },
             icon: Icon(Icons.arrow_forward_ios),
           ),
         ),

@@ -1,11 +1,12 @@
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:uuid/uuid.dart';
 
 class NoteCubit extends Cubit<NoteState> {
-  List<NoteModel> _notes = [NoteModel('12', 'testing', 'description')];
+  List<NoteModel> _notes = [];
 
   NoteCubit(NoteState state) : super(state);
 
@@ -29,6 +30,17 @@ class NoteCubit extends Cubit<NoteState> {
     emit(DeletedNote('Successfully deleted'));
   }
 
+  void editNote(NoteModel noteModel) {
+    final updated = _notes.map((note) {
+      if(note.id == noteModel.id) {
+        return noteModel;
+      } else {
+        return note;
+      }
+    }).toList();
+    _notes = updated;
+    emit(LoadedNoteState(_notes));
+  }
 
 
 }

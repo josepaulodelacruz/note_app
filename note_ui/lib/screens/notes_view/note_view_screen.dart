@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
 import 'package:note_ui/widgets/confirmation_modal.dart';
 
@@ -28,7 +29,7 @@ class NoteViewScreen extends StatelessWidget {
                     },
                   ),
                 );
-              } else {
+              } else if(value == 'add') {
                 return showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -37,6 +38,13 @@ class NoteViewScreen extends StatelessWidget {
                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                      child: BottomModal(),
                    ),
+                  )
+                );
+              } else {
+                return showDialog(
+                  context: context,
+                  builder: (context) => EditModal(
+                    noteModel: noteModel,
                   )
                 );
               }
@@ -49,6 +57,10 @@ class NoteViewScreen extends StatelessWidget {
               new PopupMenuItem<String>(
                 value: 'delete',
                 child: Text('Delete Notes'),
+              ),
+              new PopupMenuItem<String>(
+                value: 'edit',
+                child: Text('Edit Notes'),
               ),
             ],
           ),
