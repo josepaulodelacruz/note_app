@@ -5,7 +5,6 @@ import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_ui/utils/custom_snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();

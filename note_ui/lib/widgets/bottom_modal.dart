@@ -7,6 +7,7 @@ class BottomModal extends StatefulWidget {
 
 class _BottomModalState extends State<BottomModal>{
   DateTime selectedDate = DateTime.now();
+  final TextEditingController _subNotes = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +22,11 @@ class _BottomModalState extends State<BottomModal>{
           )
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             _dateRow(),
-
+            _noteInputs(),
+            _handleSubmit(),
           ],
         ),
       ),
@@ -56,6 +59,42 @@ class _BottomModalState extends State<BottomModal>{
           )
         ],
       ),
+    );
+  }
+
+  Widget _noteInputs () {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Your notes', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 17)),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.90,
+          child: Card(
+            child: TextFormField(
+              controller: _subNotes,
+              maxLines: 5,
+              onChanged: (value) {
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+              ),
+            ),
+          )
+        ),
+      ]
+    );
+  }
+
+  RaisedButton _handleSubmit () {
+    return RaisedButton(
+      onPressed: () {
+        print(_subNotes.text);
+      },
+      child: Text('Submit'),
     );
   }
 }
