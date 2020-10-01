@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BottomModal extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class BottomModal extends StatefulWidget {
 class _BottomModalState extends State<BottomModal>{
   DateTime selectedDate = DateTime.now();
   final TextEditingController _subNotes = TextEditingController();
+  final TextEditingController _subject = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class _BottomModalState extends State<BottomModal>{
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             _dateRow(),
+            _noteTitle(),
             _noteInputs(),
             _handleSubmit(),
           ],
@@ -62,6 +65,32 @@ class _BottomModalState extends State<BottomModal>{
     );
   }
 
+  Widget _noteTitle () {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Subject: '),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.90,
+          child: Card(
+            child: TextFormField(
+              controller: _subject,
+              onChanged: (value) {
+              },
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
+            ),
+          )
+        ),
+      ],
+    );
+  }
+
   Widget _noteInputs () {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +121,6 @@ class _BottomModalState extends State<BottomModal>{
   RaisedButton _handleSubmit () {
     return RaisedButton(
       onPressed: () {
-        print(_subNotes.text);
       },
       child: Text('Submit'),
     );
