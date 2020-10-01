@@ -6,7 +6,7 @@ import 'package:note_common/models/note_model.dart';
 import 'package:uuid/uuid.dart';
 
 class NoteCubit extends Cubit<NoteState> {
-  List<NoteModel> _notes = [];
+  List<NoteModel> _notes = [NoteModel('1', 'Hello world', 'Sub title', subNotes: [])];
 
   NoteCubit(NoteState state) : super(state);
 
@@ -40,6 +40,10 @@ class NoteCubit extends Cubit<NoteState> {
     }).toList();
     _notes = updated;
     emit(LoadedNoteState(_notes));
+  }
+
+
+  void addSubNotes () {
   }
 
 
