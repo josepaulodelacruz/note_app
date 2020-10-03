@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_common/bloc/note/note_cubit.dart';
+import 'package:note_common/models/note_model.dart';
+import 'package:note_common/models/sub_notes.dart';
+import 'package:note_ui/utils/generate_uuid.dart';
 
 class BottomModal extends StatefulWidget {
+  final NoteModel noteModel;
+
+  BottomModal({Key key, this.noteModel}) : super(key: key);
+
   @override
   _BottomModalState createState () => _BottomModalState();
 }
@@ -121,6 +129,10 @@ class _BottomModalState extends State<BottomModal>{
   RaisedButton _handleSubmit () {
     return RaisedButton(
       onPressed: () {
+        final generatedId = genId();
+        SubNotes subNotes = SubNotes(generatedId, selectedDate, _subject.text, _subNotes.text);
+        context.bloc<NoteCubit>().addSubNotes(widget.noteModel, subNotes);
+        Navigator.pop(context);
       },
       child: Text('Submit'),
     );

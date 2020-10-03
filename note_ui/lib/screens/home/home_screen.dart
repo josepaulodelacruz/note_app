@@ -6,12 +6,22 @@ import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState () => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  void initState () {
     BlocProvider.of<NoteCubit>(context).onLoading();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
         if(state is Theming)
@@ -46,27 +56,24 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          body: BlocListener<NoteCubit, NoteState>(
-            listener: (BuildContext context, NoteState state) {},
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: BlocBuilder<NoteCubit, NoteState>(
-                builder: (context, state) {
-                  if(state is LoadingNoteState) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if(state is LoadedNoteState) {
-                    return ListView(
-                      children: state.notes?.map((note) {
-                        return _noteCard(context, note);
-                      })?.toList() ?? [],
-                    );
-                  } else {
-                    return SizedBox();
-                  }
-                },
-              )
-            ),
+          body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: BlocBuilder<NoteCubit, NoteState>(
+              builder: (context, state) {
+                if(state is LoadingNoteState) {
+                  return Center(child: CircularProgressIndicator());
+                } else if(state is LoadedNoteState) {
+                  return ListView(
+                    children: state.notes?.map((note) {
+                      return _noteCard(context, note);
+                    })?.toList() ?? [],
+                  );
+                } else {
+                  return SizedBox();
+                }
+              },
+            )
           )
         );
             else
@@ -85,7 +92,7 @@ class HomeScreen extends StatelessWidget {
           subtitle: Text(note.description),
           trailing: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description));
+              Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description, subNotes: note.subNotes));
             },
             icon: Icon(Icons.arrow_forward_ios),
           ),

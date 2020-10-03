@@ -18,6 +18,14 @@ class LoadedNoteState extends NoteState {
   List<Object> get props => [notes];
 }
 
+class LoadedSubNotesState extends NoteState {
+  final List<SubNotes> subNotes;
+
+  LoadedSubNotesState(this.subNotes);
+
+  List<Object> get props => [subNotes];
+}
+
 class ErrorState extends NoteState {
   final String message;
 

@@ -2,7 +2,7 @@
 
 class SubNotes {
   final String id;
-  final String isDate;
+  final DateTime isDate;
   final String title;
   final String subTitle;
 
