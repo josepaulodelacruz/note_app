@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
-import 'package:note_ui/router.dart';
+import 'package:note_ui/router.dart' as OnRouter;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_observer.dart';
 import 'package:note_common/bloc/theme/theme_observer.dart';
@@ -28,24 +28,24 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          if(state is Theming) {
-            return  MaterialApp(
-              title: 'Notes Application',
-              theme: state.enableTheme ? ThemeData(
-                scaffoldBackgroundColor: Colors.grey[200],
-                buttonColor: Colors.lightBlueAccent,
-                appBarTheme: AppBarTheme(
-                  color: Colors.lightBlueAccent,
-                ),
-              ) : ThemeData.dark(),
-              initialRoute: '/',
-              onGenerateRoute: Router.generateRoute,
-            );
-          } else {
-            return SizedBox();
+          builder: (context, state) {
+            if(state is Theming) {
+              return  MaterialApp(
+                title: 'Notes Application',
+                theme: state.enableTheme ? ThemeData(
+                  scaffoldBackgroundColor: Colors.grey[200],
+                  buttonColor: Colors.lightBlueAccent,
+                  appBarTheme: AppBarTheme(
+                    color: Colors.lightBlueAccent,
+                  ),
+                ) : ThemeData.dark(),
+                initialRoute: '/',
+                onGenerateRoute: OnRouter.Router.generateRoute,
+              );
+            } else {
+              return SizedBox();
+            }
           }
-        }
       ),
     );
   }

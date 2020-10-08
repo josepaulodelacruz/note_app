@@ -4,10 +4,10 @@ import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:uuid/uuid.dart';
-import 'package:note_common/models/sub_notes.dart';
 
 class NoteCubit extends Cubit<NoteState> {
-  List<NoteModel> notes = [];
+  List<SubNotes> sub = List<SubNotes>();
+  List<NoteModel> notes = List<NoteModel>();
 
   NoteCubit(NoteState state) : super(state);
 
@@ -43,26 +43,27 @@ class NoteCubit extends Cubit<NoteState> {
     emit(LoadedNoteState(notes));
   }
 
-
   void addSubNotes (NoteModel noteModel, SubNotes subNotes) {
-    int noteIndex;
-    notes.map((e) {
-      int index = notes.indexOf(e);
-      if(noteModel.id == e.id) {
-        noteIndex = index;
-        return e;
-      }
-      return e;
-    }).toList();
-    notes[noteIndex].subNotes.add(subNotes);
-    emit(LoadedSubNotesState(notes[noteIndex].subNotes));
+    sub.add(subNotes);
+    int index = notes.indexWhere((element) => element.id == noteModel.id);
+    notes[index].subNotes = sub;
+    print(notes[index].subNotes.length);
     emit(LoadedNoteState(notes));
   }
 
-  void viewSubNotes (List<SubNotes> subNotes) {
-    emit(LoadedSubNotesState(subNotes));
+  void editSubNotes (NoteModel noteModel, SubNotes subNotes, int index) {
+    int noteIndex = notes.indexWhere((note) => note.id == noteModel.id);
+    int index = noteModel.subNotes.indexWhere((sub) => sub.id == subNotes.id);
+    notes[noteIndex].subNotes[index] = subNotes;
+    emit(LoadedNoteState(notes));
   }
 
+  void deleteSubNotes (int index, NoteModel noteModel) {
+    int noteIndex = notes.indexWhere((note) => note.id == noteModel.id);
+    notes[noteIndex].subNotes.removeAt(index);
+    emit(LoadedNoteState(notes));
 
+
+  }
 
 }

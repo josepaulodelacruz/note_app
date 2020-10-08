@@ -5,19 +5,25 @@ import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/utils/generate_uuid.dart';
 
-class BottomModal extends StatefulWidget {
-  final NoteModel noteModel;
+class BottomModal extends StatelessWidget {
+  int index;
+  bool isEdit;
+  NoteModel noteModel;
+  DateTime selectedDate;
+  SubNotes editSubNotes;
+  final TextEditingController subNotes;
+  final TextEditingController subject;
 
-  BottomModal({Key key, this.noteModel}) : super(key: key);
-
-  @override
-  _BottomModalState createState () => _BottomModalState();
-}
-
-class _BottomModalState extends State<BottomModal>{
-  DateTime selectedDate = DateTime.now();
-  final TextEditingController _subNotes = TextEditingController();
-  final TextEditingController _subject = TextEditingController();
+  BottomModal({
+    Key key,
+    this.index,
+    this.editSubNotes,
+    this.isEdit = false,
+    this.noteModel,
+    this.selectedDate,
+    this.subNotes,
+    this.subject,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +40,17 @@ class _BottomModalState extends State<BottomModal>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _dateRow(),
-            _noteTitle(),
-            _noteInputs(),
-            _handleSubmit(),
+            _dateRow(context),
+            _noteTitle(context),
+            _noteInputs(context),
+            _handleSubmit(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _dateRow () {
+  Widget _dateRow (context) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,9 +66,6 @@ class _BottomModalState extends State<BottomModal>{
                     firstDate: DateTime(1950),
                     lastDate: DateTime(2030),
                   );
-                  setState(() {
-                    selectedDate = date;
-                  });
                 },
                 title: Text('${selectedDate.month}/${selectedDate.day}/${selectedDate.year}', textAlign: TextAlign.center)
               ),
@@ -73,7 +76,7 @@ class _BottomModalState extends State<BottomModal>{
     );
   }
 
-  Widget _noteTitle () {
+  Widget _noteTitle (context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,7 +85,7 @@ class _BottomModalState extends State<BottomModal>{
           width: MediaQuery.of(context).size.width * 0.90,
           child: Card(
             child: TextFormField(
-              controller: _subject,
+              controller: subject,
               onChanged: (value) {
               },
               decoration: InputDecoration(
@@ -99,7 +102,7 @@ class _BottomModalState extends State<BottomModal>{
     );
   }
 
-  Widget _noteInputs () {
+  Widget _noteInputs (context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,7 +111,7 @@ class _BottomModalState extends State<BottomModal>{
           width: MediaQuery.of(context).size.width * 0.90,
           child: Card(
             child: TextFormField(
-              controller: _subNotes,
+              controller: subNotes,
               maxLines: 5,
               onChanged: (value) {
               },
@@ -126,15 +129,37 @@ class _BottomModalState extends State<BottomModal>{
     );
   }
 
-  RaisedButton _handleSubmit () {
-    return RaisedButton(
-      onPressed: () {
-        final generatedId = genId();
-        SubNotes subNotes = SubNotes(generatedId, selectedDate, _subject.text, _subNotes.text);
-        context.bloc<NoteCubit>().addSubNotes(widget.noteModel, subNotes);
-        Navigator.pop(context);
-      },
-      child: Text('Submit'),
+  Widget _handleSubmit (context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if(isEdit) ...[
+          RaisedButton(
+            color: Colors.red,
+            onPressed: () {
+              BlocProvider.of<NoteCubit>(context).deleteSubNotes(index, noteModel);
+              Navigator.pop(context);
+            },
+            child: Text('Delete'),
+          )
+        ],
+        SizedBox(width: 10),
+        RaisedButton(
+          onPressed: () {
+            if(!isEdit) {
+              final generatedId = genId();
+              SubNotes _subNotes = SubNotes(generatedId, selectedDate, subject.text, subNotes.text);
+              BlocProvider.of<NoteCubit>(context).addSubNotes(noteModel, _subNotes);
+              Navigator.pop(context);
+            } else {
+              SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text);
+              BlocProvider.of<NoteCubit>(context).editSubNotes(noteModel, _subNotes, index);
+              Navigator.pop(context);
+            }
+          },
+          child: Text('Submit'),
+        ),
+      ],
     );
   }
 }

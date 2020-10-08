@@ -5,7 +5,7 @@ class NoteModel {
   String id;
   String title;
   String description;
-  List<SubNotes> subNotes;
+  List<SubNotes> subNotes = List<SubNotes>();
 
-  NoteModel(this.id, this.title, this.description, {this.subNotes = const []});
+  NoteModel(this.id, this.title, this.description, {this.subNotes});
 }

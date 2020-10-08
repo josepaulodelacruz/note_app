@@ -1,10 +1,10 @@
 
 
 class SubNotes {
-  final String id;
-  final DateTime isDate;
-  final String title;
-  final String subTitle;
+  String id;
+  DateTime isDate;
+  String title;
+  String subTitle;
 
   SubNotes(
     this.id,

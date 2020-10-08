@@ -1,7 +1,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:note_common/models/note_model.dart';
-import 'package:note_common/models/sub_notes.dart';
 
 @immutable
 abstract class NoteState {}
@@ -16,14 +15,6 @@ class LoadedNoteState extends NoteState {
   LoadedNoteState(this.notes);
 
   List<Object> get props => [notes];
-}
-
-class LoadedSubNotesState extends NoteState {
-  final List<SubNotes> subNotes;
-
-  LoadedSubNotesState(this.subNotes);
-
-  List<Object> get props => [subNotes];
 }
 
 class ErrorState extends NoteState {
