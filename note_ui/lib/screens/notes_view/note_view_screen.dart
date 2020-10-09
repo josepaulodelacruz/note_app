@@ -4,6 +4,7 @@ import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_ui/screens/notes_view/widgets/navbar.dart';
+import 'package:note_ui/screens/notes_view/widgets/note_card.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
 
 class NoteViewScreen extends StatefulWidget {
@@ -65,43 +66,49 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         ),
       ),
       body: ListView(
-        children: noteModel.subNotes?.map((note) {
-          int index = noteModel.subNotes.indexOf(note);
-          return Card(
-            margin: EdgeInsets.all(10),
-            child: ListTile(
-              title: Text(note.title),
-              trailing: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  setState(() {
-                    _subNotes.text = note.subTitle;
-                    _subject.text = note.title;
-                  });
-                  return showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (_) => SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: BottomModal(
-                          isEdit: true,
-                          editSubNotes: note,
-                          noteModel: noteModel,
-                          selectedDate: selectedDate,
-                          subNotes: _subNotes,
-                          subject: _subject,
-                          index: index,
-                        ),
-                      ),
-                    )
-                  );
-                },
-              ),
-            ),
-          );
-        })?.toList() ?? [],
-      )
+        children: [
+          NoteCard(),
+        ],
+      ),
+//      body: ListView(
+//        children: noteModel.subNotes?.map((note) {
+//          int index = noteModel.subNotes.indexOf(note);
+//          return Card(
+//            margin: EdgeInsets.all(10),
+//            child: ListTile(
+//              title: Text(note.title),
+//              subtitle: Text(note.subTitle),
+//              trailing: IconButton(
+//                icon: Icon(Icons.edit),
+//                onPressed: () {
+//                  setState(() {
+//                    _subNotes.text = note.subTitle;
+//                    _subject.text = note.title;
+//                  });
+//                  return showModalBottomSheet(
+//                    context: context,
+//                    isScrollControlled: true,
+//                    builder: (_) => SingleChildScrollView(
+//                      child: Container(
+//                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//                        child: BottomModal(
+//                          isEdit: true,
+//                          editSubNotes: note,
+//                          noteModel: noteModel,
+//                          selectedDate: selectedDate,
+//                          subNotes: _subNotes,
+//                          subject: _subject,
+//                          index: index,
+//                        ),
+//                      ),
+//                    )
+//                  );
+//                },
+//              ),
+//            ),
+//          );
+//        })?.toList() ?? [],
+//      )
     );
   }
 }
