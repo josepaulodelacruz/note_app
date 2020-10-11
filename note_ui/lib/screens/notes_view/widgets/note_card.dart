@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class NoteCard extends StatelessWidget {
@@ -13,7 +14,6 @@ class NoteCard extends StatelessWidget {
             _titleSection(context),
             _noteAlbum(context),
             _noteFooter(context),
-
           ],
         ),
       ),
@@ -58,11 +58,24 @@ class NoteCard extends StatelessWidget {
   Widget _noteAlbum (context) {
     return Container(
       width: MediaQuery.of(context).size.width,
+      height: 250,
       color: Colors.blue,
-      child: Text(
-        'Album Here'
-      ),
-
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 250,
+          viewportFraction: 1.0,
+          enlargeCenterPage: false
+        ),
+        items: [1,2,3,4,5].map((i) {
+          return Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Colors.amber
+            ),
+            child: Text('text $i', style: TextStyle(fontSize: 16.0),)
+          );
+        }).toList(),
+      )
     );
   }
 
@@ -70,6 +83,12 @@ class NoteCard extends StatelessWidget {
     return ListTile(
       title: Text('12/23/20', style: TextStyle(fontSize: 12)),
       subtitle: Text('12:20', style: TextStyle(fontSize: 12)),
+      trailing: IconButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/camera');
+        },
+        icon: Icon(Icons.photo_album)
+      ),
     );
   }
 }
