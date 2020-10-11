@@ -10,6 +10,7 @@ import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
 
 void main () {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = NoteObserver();
   Bloc.observer = ThemeObserver();
   runApp(MyApp());

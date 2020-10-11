@@ -1,7 +1,15 @@
+import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:note_common/models/note_model.dart';
+import 'package:note_common/models/sub_notes.dart';
 
 class NoteCard extends StatelessWidget {
+  SubNotes subNotes;
+  final Function onHandle;
+
+  NoteCard({Key key, this.subNotes, this.onHandle}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,11 +36,16 @@ class NoteCard extends StatelessWidget {
         title: Row(
           children: [
             Checkbox(value: true),
-            Text('Note Title'),
+            Text(subNotes.title),
             Spacer(),
             PopupMenuButton(
               onSelected: (value) {
-                print(value);
+                if(value == 'view') {
+                  onHandle('view');
+                } else if(value == 'edit') {
+                  onHandle('edit');
+                }
+
               },
               itemBuilder: (_) => <PopupMenuItem<String>>[
                 new PopupMenuItem<String>(
@@ -72,7 +85,7 @@ class NoteCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.amber
             ),
-            child: Text('text $i', style: TextStyle(fontSize: 16.0),)
+            child: Text('${subNotes.subTitle} $i', style: TextStyle(fontSize: 16.0),)
           );
         }).toList(),
       )
@@ -84,8 +97,10 @@ class NoteCard extends StatelessWidget {
       title: Text('12/23/20', style: TextStyle(fontSize: 12)),
       subtitle: Text('12:20', style: TextStyle(fontSize: 12)),
       trailing: IconButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/camera');
+        onPressed: () async {
+          final cameras = await availableCameras();
+          final firstCamera = cameras.first;
+          Navigator.pushNamed(context, '/camera', arguments: firstCamera);
         },
         icon: Icon(Icons.photo_album)
       ),

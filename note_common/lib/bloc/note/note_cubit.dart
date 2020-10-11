@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 
 class NoteCubit extends Cubit<NoteState> {
   List<SubNotes> sub = List<SubNotes>();
-  List<NoteModel> notes = List<NoteModel>();
+  List<NoteModel> notes = List<NoteModel>() ?? [];
 
   NoteCubit(NoteState state) : super(state);
 
@@ -27,8 +27,8 @@ class NoteCubit extends Cubit<NoteState> {
 
   void deleteNote(String id) {
     notes.removeWhere((note) => note.id == id);
+    sub = [];
     emit(LoadedNoteState(notes));
-    emit(DeletedNote('Successfully deleted'));
   }
 
   void editNote(NoteModel noteModel) {

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
@@ -29,7 +30,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
     BlocProvider.of<NoteCubit>(context).sub = [];
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is LoadedNoteState) {
-        NoteModel a = state.notes.firstWhere((note) => note.id == noteModel.id);
+        NoteModel a = state.notes.firstWhere((note) => note.id == noteModel.id, orElse: () => null);
         if(mounted) {
           setState(() {
             noteModel = a;
@@ -37,6 +38,11 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         }
       }
     });
+  }
+
+  @override
+  void dispose () {
+    super.dispose();
   }
 
   @override
@@ -66,49 +72,38 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         ),
       ),
       body: ListView(
-        children: [
-          NoteCard(),
-        ],
+        physics: ClampingScrollPhysics(),
+        children: noteModel.subNotes?.map((note) {
+          int index = noteModel.subNotes.indexOf(note);
+          return NoteCard(
+            subNotes: note,
+            onHandle: (String value) async {
+              if(value == 'view') {
+                print('view');
+              } else if(value == 'edit') {
+                return showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (_) => SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: BottomModal(
+                        isEdit: true,
+                        editSubNotes: note,
+                        noteModel: noteModel,
+                        selectedDate: selectedDate,
+                        subNotes: _subNotes,
+                        subject: _subject,
+                        index: index,
+                      ),
+                    ),
+                  )
+                );
+              }
+            },
+          );
+        })?.toList() ?? [],
       ),
-//      body: ListView(
-//        children: noteModel.subNotes?.map((note) {
-//          int index = noteModel.subNotes.indexOf(note);
-//          return Card(
-//            margin: EdgeInsets.all(10),
-//            child: ListTile(
-//              title: Text(note.title),
-//              subtitle: Text(note.subTitle),
-//              trailing: IconButton(
-//                icon: Icon(Icons.edit),
-//                onPressed: () {
-//                  setState(() {
-//                    _subNotes.text = note.subTitle;
-//                    _subject.text = note.title;
-//                  });
-//                  return showModalBottomSheet(
-//                    context: context,
-//                    isScrollControlled: true,
-//                    builder: (_) => SingleChildScrollView(
-//                      child: Container(
-//                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-//                        child: BottomModal(
-//                          isEdit: true,
-//                          editSubNotes: note,
-//                          noteModel: noteModel,
-//                          selectedDate: selectedDate,
-//                          subNotes: _subNotes,
-//                          subject: _subject,
-//                          index: index,
-//                        ),
-//                      ),
-//                    )
-//                  );
-//                },
-//              ),
-//            ),
-//          );
-//        })?.toList() ?? [],
-//      )
     );
   }
 }
