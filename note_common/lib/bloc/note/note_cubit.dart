@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 
 class NoteCubit extends Cubit<NoteState> {
   List<SubNotes> sub = List<SubNotes>();
-  List<NoteModel> notes = List<NoteModel>() ?? [];
+  List<NoteModel> notes = List<NoteModel>();
 
   NoteCubit(NoteState state) : super(state);
 
@@ -26,18 +26,16 @@ class NoteCubit extends Cubit<NoteState> {
   }
 
   void deleteNote(String id) {
+    int index = notes.indexWhere((note) => note.id == id);
+    notes[index].subNotes = []; // delete subnotes
     notes.removeWhere((note) => note.id == id);
-    sub = [];
     emit(LoadedNoteState(notes));
   }
 
   void editNote(NoteModel noteModel) {
     final updated = notes.map((note) {
-      if(note.id == noteModel.id) {
-        return noteModel;
-      } else {
-        return note;
-      }
+      return note.id == noteModel.id ?
+          noteModel : note;
     }).toList();
     notes = updated;
     emit(LoadedNoteState(notes));
@@ -62,8 +60,6 @@ class NoteCubit extends Cubit<NoteState> {
     int noteIndex = notes.indexWhere((note) => note.id == noteModel.id);
     notes[noteIndex].subNotes.removeAt(index);
     emit(LoadedNoteState(notes));
-
-
   }
 
 }

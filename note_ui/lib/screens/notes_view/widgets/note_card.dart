@@ -44,8 +44,9 @@ class NoteCard extends StatelessWidget {
                   onHandle('view');
                 } else if(value == 'edit') {
                   onHandle('edit');
+                } else {
+                  onHandle('delete');
                 }
-
               },
               itemBuilder: (_) => <PopupMenuItem<String>>[
                 new PopupMenuItem<String>(

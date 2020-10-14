@@ -27,13 +27,15 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   void initState () {
     super.initState();
     noteModel = widget.noteModel;
-    BlocProvider.of<NoteCubit>(context).sub = [];
+    BlocProvider.of<NoteCubit>(context).sub = []; // initialized empty
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is LoadedNoteState) {
-        NoteModel a = state.notes.firstWhere((note) => note.id == noteModel.id, orElse: () => null);
+        NoteModel a =
+          state.notes.firstWhere((note) => note.id == noteModel.id, orElse: () => null);
         if(mounted) {
           setState(() {
-            noteModel = a;
+            noteModel = a != null ?
+              a : widget.noteModel;
           });
         }
       }
@@ -78,27 +80,32 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
           return NoteCard(
             subNotes: note,
             onHandle: (String value) async {
-              if(value == 'view') {
-                print('view');
-              } else if(value == 'edit') {
-                return showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (_) => SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: BottomModal(
-                        isEdit: true,
-                        editSubNotes: note,
-                        noteModel: noteModel,
-                        selectedDate: selectedDate,
-                        subNotes: _subNotes,
-                        subject: _subject,
-                        index: index,
+              switch(value) {
+                case 'view':
+                  break;
+                case 'edit':
+                  return showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (_) => SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: BottomModal(
+                          isEdit: true,
+                          editSubNotes: note,
+                          noteModel: noteModel,
+                          selectedDate: selectedDate,
+                          subNotes: _subNotes,
+                          subject: _subject,
+                          index: index,
+                        ),
                       ),
-                    ),
-                  )
-                );
+                    )
+                  );
+                  break;
+                case 'delete':
+                  context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
+                  break;
               }
             },
           );

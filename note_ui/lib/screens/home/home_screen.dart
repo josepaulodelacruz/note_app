@@ -16,12 +16,12 @@ class _HomeScreenState extends State<HomeScreen>{
 
   @override
   void initState () {
-    BlocProvider.of<NoteCubit>(context).onLoading();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<NoteCubit>(context).onLoading();
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
         if(state is Theming)

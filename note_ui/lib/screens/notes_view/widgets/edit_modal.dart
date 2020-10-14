@@ -48,9 +48,9 @@ class _EditModalState extends State<EditModal>{
         ),
         FlatButton(
           onPressed: () {
-            NoteModel newNoteModel = NoteModel(widget.noteModel.id, _newTitle.text, _newDescription.text);
+           NoteModel newNoteModel = NoteModel(widget.noteModel.id, _newTitle.text, _newDescription.text, subNotes: widget.noteModel.subNotes);
            context.bloc<NoteCubit>().editNote(newNoteModel);
-           Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+           Navigator.pop(context);
           },
           child: Text('Yes'),
         ),
