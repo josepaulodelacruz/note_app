@@ -22,6 +22,8 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   DateTime selectedDate = DateTime.now();
   final TextEditingController _subNotes = TextEditingController();
   final TextEditingController _subject = TextEditingController();
+  final TextEditingController _newTitle = TextEditingController();
+  final TextEditingController _newDescription = TextEditingController();
 
   @override
   void initState () {
@@ -54,6 +56,8 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         preferredSize: Size.fromHeight(60),
         child: NavBar(
           noteModel: noteModel,
+          newTitle: _newTitle,
+          newDescription: _newDescription,
           renderBottomModal: () {
             return showModalBottomSheet(
               context: context,

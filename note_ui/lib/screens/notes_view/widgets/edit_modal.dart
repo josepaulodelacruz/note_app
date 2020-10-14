@@ -3,18 +3,16 @@ import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EditModal extends StatefulWidget {
+class EditModal extends StatelessWidget {
   final NoteModel noteModel;
-  EditModal({this.noteModel}) : super();
+  final TextEditingController newTitle;
+  final TextEditingController newDescription;
 
-  @override
-  _EditModalState createState () => _EditModalState();
-
-}
-
-class _EditModalState extends State<EditModal>{
-  final TextEditingController _newTitle = TextEditingController();
-  final TextEditingController _newDescription = TextEditingController();
+  EditModal({
+    this.noteModel,
+    this.newTitle,
+    this.newDescription,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +23,15 @@ class _EditModalState extends State<EditModal>{
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextField(
-              controller: _newTitle,
+              controller: newTitle,
               decoration: InputDecoration(
-                hintText: '${widget.noteModel.title}'
+                hintText: '${noteModel.title}'
               ),
             ),
             TextField(
-              controller: _newDescription,
+              controller: newDescription,
               decoration: InputDecoration(
-                  hintText: '${widget.noteModel.description}'
+                  hintText: '${noteModel.description}'
               ),
             ),
           ],
@@ -48,7 +46,7 @@ class _EditModalState extends State<EditModal>{
         ),
         FlatButton(
           onPressed: () {
-           NoteModel newNoteModel = NoteModel(widget.noteModel.id, _newTitle.text, _newDescription.text, subNotes: widget.noteModel.subNotes);
+           NoteModel newNoteModel = NoteModel(noteModel.id, newTitle.text, newDescription.text, subNotes: noteModel.subNotes);
            context.bloc<NoteCubit>().editNote(newNoteModel);
            Navigator.pop(context);
           },

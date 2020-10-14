@@ -8,8 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class NavBar extends StatelessWidget {
   final NoteModel noteModel;
   final Function renderBottomModal;
+  final TextEditingController newTitle;
+  final TextEditingController newDescription;
 
-  NavBar({this.noteModel, this.renderBottomModal});
+  NavBar({
+    this.noteModel,
+    this.renderBottomModal,
+    this.newTitle,
+    this.newDescription
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,11 @@ class NavBar extends StatelessWidget {
             } else if(value == 'edit') {
               return showDialog(
                 context: context,
-                builder: (_) => EditModal(noteModel: noteModel),
+                builder: (_) => EditModal(
+                  noteModel: noteModel,
+                  newTitle: newTitle,
+                  newDescription: newDescription,
+                ),
               );
             } else {
               renderBottomModal();
