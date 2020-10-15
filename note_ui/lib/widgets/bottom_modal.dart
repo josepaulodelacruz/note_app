@@ -5,25 +5,46 @@ import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/utils/generate_uuid.dart';
 
-class BottomModal extends StatelessWidget {
+class BottomModal extends StatefulWidget {
   int index;
   bool isEdit;
   NoteModel noteModel;
-  DateTime selectedDate;
   SubNotes editSubNotes;
-  final TextEditingController subNotes;
-  final TextEditingController subject;
+  DateTime selectedDate;
 
   BottomModal({
     Key key,
     this.index,
     this.editSubNotes,
     this.isEdit = false,
-    this.noteModel,
     this.selectedDate,
-    this.subNotes,
-    this.subject,
+    this.noteModel,
   }) : super(key: key);
+
+  @override
+  _BottomModalState createState () => _BottomModalState();
+}
+
+class _BottomModalState extends State<BottomModal>{
+  int index;
+  bool isEdit;
+  NoteModel noteModel;
+  SubNotes editSubNotes;
+  DateTime selectedDate;
+  TextEditingController subNotes = TextEditingController();
+  TextEditingController subject = TextEditingController();
+
+  @override
+  void initState () {
+    super.initState();
+    noteModel = widget.noteModel;
+    isEdit = widget.isEdit;
+    index = widget.index;
+    editSubNotes = widget.editSubNotes;
+    selectedDate = editSubNotes != null ? editSubNotes.isDate : DateTime.now();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +81,15 @@ class BottomModal extends StatelessWidget {
             child: Card(
               child: ListTile(
                 onTap: () async {
-                  final DateTime date = await showDatePicker(
+                  DateTime date = await showDatePicker(
                     context: context,
                     initialDate: selectedDate,
                     firstDate: DateTime(1950),
                     lastDate: DateTime(2030),
                   );
+                  setState(() {
+                    selectedDate = date;
+                  });
                 },
                 title: Text('${selectedDate.month}/${selectedDate.day}/${selectedDate.year}', textAlign: TextAlign.center)
               ),
