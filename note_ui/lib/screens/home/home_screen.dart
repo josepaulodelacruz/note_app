@@ -5,6 +5,7 @@ import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_ui/screens/home/widgets/navbar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -27,34 +28,9 @@ class _HomeScreenState extends State<HomeScreen>{
         if(state is Theming)
         return Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text('Home'),
-            actions: [
-              PopupMenuButton(
-                onSelected: (value) {
-                  if(value == 'add') {
-                    Navigator.pushNamed(context, '/add');
-                  } else {
-                    context.bloc<ThemeCubit>().changeTheme(state.enableTheme);
-                  }
-
-                },
-                itemBuilder: (_) => <PopupMenuItem<String>>[
-                  new PopupMenuItem<String>(
-                    value: 'add',
-                    child: Text('Add Notes'),
-                  ),
-                  new PopupMenuItem<String>(
-                    value: 'search',
-                    child: Text('Search Notes'),
-                  ),
-                  new PopupMenuItem<String>(
-                    value: 'theme',
-                    child: Text('Enable ${state.enableTheme ? 'Dark' : 'Light'} theme'),
-                  ),
-                ],
-              ),
-            ],
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: NavBar(state: state),
           ),
           body: Container(
             width: MediaQuery.of(context).size.width,
