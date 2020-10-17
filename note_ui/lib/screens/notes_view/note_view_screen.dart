@@ -20,8 +20,6 @@ class NoteViewScreen extends StatefulWidget {
 class _NoteViewScreenState extends State<NoteViewScreen>{
   NoteModel noteModel;
   DateTime selectedDate = DateTime.now();
-//  final TextEditingController _subNotes = TextEditingController();
-//  final TextEditingController _subject = TextEditingController();
   final TextEditingController _newTitle = TextEditingController();
   final TextEditingController _newDescription = TextEditingController();
 
@@ -68,8 +66,6 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                   child: BottomModal(
                     noteModel: noteModel,
                     selectedDate: selectedDate,
-//                    subNotes: _subNotes,
-//                    subject: _subject,
                   ),
                 ),
               )
@@ -82,6 +78,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         children: noteModel.subNotes?.map((note) {
           int index = noteModel.subNotes.indexOf(note);
           return NoteCard(
+            noteId: noteModel.id,
             subNotes: note,
             onHandle: (String value) async {
               switch(value) {
@@ -99,8 +96,6 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                           editSubNotes: note,
                           noteModel: noteModel,
                           selectedDate: noteModel.subNotes[index].isDate,
-//                          subNotes: _subNotes,
-//                          subject: _subject,
                           index: index,
                         ),
                       ),

@@ -140,11 +140,11 @@ class _BottomModalState extends State<BottomModal>{
               onChanged: (value) {
               },
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
             ),
           )
@@ -172,11 +172,11 @@ class _BottomModalState extends State<BottomModal>{
           onPressed: () {
             if(!isEdit) {
               final generatedId = genId();
-              SubNotes _subNotes = SubNotes(generatedId, selectedDate, subject.text, subNotes.text);
+              SubNotes _subNotes = SubNotes(generatedId, selectedDate, subject.text, subNotes.text, photos: []);
               BlocProvider.of<NoteCubit>(context).addSubNotes(noteModel, _subNotes);
               Navigator.pop(context);
             } else {
-              SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text);
+              SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text, photos: []);
               BlocProvider.of<NoteCubit>(context).editSubNotes(noteModel, _subNotes, index);
               Navigator.pop(context);
             }

@@ -1,14 +1,16 @@
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/sub_notes.dart';
+import 'package:note_ui/model/screen_argument.dart';
 
 class NoteCard extends StatelessWidget {
+  String noteId;
   SubNotes subNotes;
   final Function onHandle;
 
-  NoteCard({Key key, this.subNotes, this.onHandle}) : super(key: key);
+  NoteCard({Key key, this.noteId, this.subNotes, this.onHandle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,10 @@ class NoteCard extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         title: Row(
           children: [
-            Checkbox(value: true),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(Icons.notes),
+            ),
             Text(subNotes.title),
             Spacer(),
             PopupMenuButton(
@@ -80,28 +85,26 @@ class NoteCard extends StatelessWidget {
           viewportFraction: 1.0,
           enlargeCenterPage: false
         ),
-        items: [1,2,3,4,5].map((i) {
+        items: subNotes.photos?.map((pp) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: Colors.amber
-            ),
-            child: Text('${subNotes.subTitle} $i', style: TextStyle(fontSize: 16.0),)
+            decoration: BoxDecoration(),
+            child: Image.file(File(pp.imagePath), fit: BoxFit.cover)
           );
-        }).toList(),
+        })?.toList() ?? [],
       )
     );
   }
 
   Widget _noteFooter (context) {
     return ListTile(
-      title: Text('12/23/20', style: TextStyle(fontSize: 12)),
+      title: Text('${subNotes.isDate.month}/${subNotes.isDate.day}/${subNotes.isDate.year}', style: TextStyle(fontSize: 12)),
       subtitle: Text('12:20', style: TextStyle(fontSize: 12)),
       trailing: IconButton(
         onPressed: () async {
           final cameras = await availableCameras();
           final firstCamera = cameras.first;
-          Navigator.pushNamed(context, '/camera', arguments: firstCamera);
+          Navigator.pushNamed(context, '/camera', arguments: ScreenArguments(firstCamera: firstCamera, noteId: noteId, subNoteId: subNotes.id));
         },
         icon: Icon(Icons.photo_album)
       ),

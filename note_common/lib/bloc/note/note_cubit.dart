@@ -1,7 +1,11 @@
 
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:note_common/models/pictures.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:uuid/uuid.dart';
 
@@ -59,6 +63,16 @@ class NoteCubit extends Cubit<NoteState> {
   void deleteSubNotes (int index, NoteModel noteModel) {
     int noteIndex = notes.indexWhere((note) => note.id == noteModel.id);
     notes[noteIndex].subNotes.removeAt(index);
+    emit(LoadedNoteState(notes));
+  }
+
+  void addImage (String imagePath, String noteId, String subNoteId) {
+    int noteIndex = notes.indexWhere((note) => note.id == noteId);
+    int subIndex = notes[noteIndex].subNotes.indexWhere((subNotes) => subNotes.id == subNoteId);
+    var uuid = Uuid();
+    String id = uuid.v4();
+    Pictures picture = Pictures(id: id, imagePath: imagePath);
+    notes[noteIndex].subNotes[subIndex].photos.add(picture);
     emit(LoadedNoteState(notes));
   }
 
