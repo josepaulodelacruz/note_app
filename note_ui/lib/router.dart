@@ -16,7 +16,7 @@ class Router {
       case viewNotes:
         return MaterialPageRoute(builder: (_) => NoteViewScreen(noteModel: settings.arguments));
       case galleryNotes:
-        return MaterialPageRoute(builder: (_) => NoteGalleryScreen());
+        return MaterialPageRoute(builder: (_) => NoteGalleryScreen(arguments: settings.arguments));
       case camera:
         return MaterialPageRoute(builder: (_) => TakePhotoScreen(args: settings.arguments));
       default:

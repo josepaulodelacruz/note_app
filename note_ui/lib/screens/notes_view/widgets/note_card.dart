@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:note_common/models/pictures.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/model/screen_argument.dart';
 
@@ -14,6 +15,7 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(subNotes.photos);
     return Container(
       margin: EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
@@ -22,7 +24,7 @@ class NoteCard extends StatelessWidget {
         child: Column(
           children: [
             _titleSection(context),
-            _noteAlbum(context),
+            subNotes.photos.isEmpty ? SizedBox() : _noteAlbum(context),
             _noteFooter(context),
           ],
         ),
@@ -78,20 +80,29 @@ class NoteCard extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 250,
-      color: Colors.blue,
-      child: CarouselSlider(
+      child: CarouselSlider.builder(
+        itemCount: subNotes.photos.length,
+        itemBuilder: (context, int itemIndex) {
+          Pictures pp = subNotes.photos[itemIndex];
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/gallery', arguments: ScreenArguments(photos: subNotes.photos, index: itemIndex, noteId: noteId, subNoteId: subNotes.id));
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(),
+              child: Hero(tag: pp.id, child: Image.file(File(pp.imagePath), fit: BoxFit.cover))
+            ),
+          );
+        },
         options: CarouselOptions(
+          enableInfiniteScroll: false,
+          reverse: false,
+          initialPage: 0,
           height: 250,
           viewportFraction: 1.0,
           enlargeCenterPage: false
         ),
-        items: subNotes.photos?.map((pp) {
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(),
-            child: Image.file(File(pp.imagePath), fit: BoxFit.cover)
-          );
-        })?.toList() ?? [],
       )
     );
   }

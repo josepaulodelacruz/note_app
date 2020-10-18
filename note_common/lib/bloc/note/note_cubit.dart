@@ -39,7 +39,7 @@ class NoteCubit extends Cubit<NoteState> {
   void editNote(NoteModel noteModel) {
     final updated = notes.map((note) {
       return note.id == noteModel.id ?
-          noteModel : note;
+        noteModel : note;
     }).toList();
     notes = updated;
     emit(LoadedNoteState(notes));
@@ -73,6 +73,13 @@ class NoteCubit extends Cubit<NoteState> {
     String id = uuid.v4();
     Pictures picture = Pictures(id: id, imagePath: imagePath);
     notes[noteIndex].subNotes[subIndex].photos.add(picture);
+    emit(LoadedNoteState(notes));
+  }
+
+  void deleteImage (List<Pictures> photos, String noteId, String subNoteId) {
+    int noteIndex = notes.indexWhere((note) => note.id == noteId);
+    int subIndex = notes[noteIndex].subNotes.indexWhere((subNotes) => subNotes.id == subNoteId);
+    notes[noteIndex].subNotes[subIndex].photos = photos;
     emit(LoadedNoteState(notes));
   }
 

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class ConfirmationModal extends StatelessWidget {
   final Function handle;
+  String titleType;
 
-  ConfirmationModal({this.handle}) : super();
+  ConfirmationModal({this.handle, this.titleType}) : super();
 
   @override
   Widget build(BuildContext context) {
