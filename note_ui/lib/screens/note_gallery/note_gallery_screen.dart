@@ -19,6 +19,8 @@ class NoteGalleryScreen extends StatefulWidget {
 }
 
 class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
+  int _isSelected = 0;
+  bool _isSelect = false;
   ScrollController _scrollController = ScrollController();
   List<Pictures> _photos = List<Pictures>();
 
@@ -28,53 +30,101 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
     _photos = widget.arguments.photos;
   }
 
+  void _unSelectAll () {
+    if(!_isSelect) {
+      _unSelectItem();
+      setState(() {
+        _isSelected = 0;
+      });
+    }
+  }
+
+  void _unSelectItem () {
+    _photos.map((e) {
+      int index = _photos.indexOf(e);
+      setState(() {
+        _photos[index].isSeleted = false;
+      });
+    }).toList();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Gallery'),
-        actions: [
-          PopupMenuButton(
-            onSelected: (value) {
-              switch(value) {
-                case 'delete':
-                  showDialog(
-                    context: context,
-                    builder: (_) => ConfirmationModal(
-                      titleType: 'Photos',
-                      handle: () {
-                        setState(() {
-                          _photos.removeWhere((p) => p.isSeleted == true);
-                        });
-                        BlocProvider.of<NoteCubit>(context).deleteImage(
-                            _photos,
-                            widget.arguments.noteId,
-                            widget.arguments.subNoteId
-                        );
-                        Navigator.pop(context);
-                      },
-                    ),
-                  );
-                  break;
-                default:
-                  break;
-              }
+    return WillPopScope(
+      onWillPop: () {
+        _unSelectItem();
+        Navigator.pop(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              _unSelectItem();
+              Navigator.pop(context);
             },
-            itemBuilder: (_) => <PopupMenuItem<String>>[
-              new PopupMenuItem<String>(
-                value: 'select',
-                child: Text('Select'),
-              ),
-              new PopupMenuItem<String>(
-                value: 'delete',
-                child: Text('Delete'),
-              ),
-            ],
           ),
-        ],
+          title: Text('Gallery'),
+          actions: [
+            if(_isSelect) ...[
+              Align(
+                alignment: Alignment.center,
+                child: Text('Selected: ${_isSelected}'),
+              )
+            ],
+            PopupMenuButton(
+              onSelected: (value) {
+                switch(value) {
+                  case 'select':
+                    setState(() {
+                      _isSelect = !_isSelect;
+                    });
+                    _unSelectAll();
+                    break;
+                  case 'delete':
+                    showDialog(
+                      context: context,
+                      builder: (_) => ConfirmationModal(
+                        titleType: 'Photos',
+                        handle: () {
+                          setState(() {
+                            _photos.removeWhere((p) => p.isSeleted == true);
+                            _isSelected = 0;
+                            _isSelect = false;
+                          });
+                          BlocProvider.of<NoteCubit>(context).deleteImage(
+                              _photos,
+                              widget.arguments.noteId,
+                              widget.arguments.subNoteId
+                          );
+                          Navigator.pop(context);
+
+                        },
+                      ),
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              },
+              itemBuilder: (_) => <PopupMenuItem<String>>[
+                new PopupMenuItem<String>(
+                  value: 'select',
+                  child: Text(_isSelect ? 'Unselect' : 'Select'),
+                ),
+                if(_isSelect) ...[
+                  PopupMenuItem<String>(
+                    value: 'delete',
+                    child: Text('Delete'),
+                  ),
+                ]
+              ],
+            ),
+          ],
+        ),
+        body: _grid(),
       ),
-      body: _grid(),
     );
   }
 
@@ -87,15 +137,23 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
         Pictures pic = _photos[index];
         return InkWell(
           onTap: () {
-            setState(() {
-              _photos[index].isSeleted = !pic.isSeleted;
-            });
+            if(_isSelect) {
+              setState(() {
+                _photos[index].isSeleted = !pic.isSeleted;
+                if(_photos[index].isSeleted) {
+                  _isSelected++;
+                } else {
+                  _isSelected--;
+                }
+              });
+            } else {
+            }
           },
           child: Hero(
             tag: pic.id,
             child: Card(
               child: Opacity(
-                opacity: pic.isSeleted == true ? 0.5 : 1,
+                opacity: pic.isSeleted == true ? 0.3 : 1,
                 child: Image.file(File(pic.imagePath), fit: BoxFit.cover)
               ),
             ),

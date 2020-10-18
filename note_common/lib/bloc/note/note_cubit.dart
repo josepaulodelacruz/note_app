@@ -49,7 +49,6 @@ class NoteCubit extends Cubit<NoteState> {
     sub.add(subNotes);
     int index = notes.indexWhere((element) => element.id == noteModel.id);
     notes[index].subNotes = sub;
-    print(notes[index].subNotes.length);
     emit(LoadedNoteState(notes));
   }
 
