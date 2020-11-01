@@ -1,8 +1,4 @@
-
-import 'dart:ui';
-
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
