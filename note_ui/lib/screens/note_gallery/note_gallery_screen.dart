@@ -147,6 +147,7 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                 }
               });
             } else {
+              Navigator.pushNamed(context, '/gallery-view', arguments: ScreenArguments(photos: _photos, index: index));
             }
           },
           child: Hero(

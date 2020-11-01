@@ -5,6 +5,7 @@ import 'package:note_ui/screens/notes_add/add_note_screend.dart';
 import 'package:note_ui/screens/notes_view/note_view_screen.dart';
 import 'package:note_ui/screens/router_const.dart';
 import 'package:note_ui/screens/take_photo/take_photo_screen.dart';
+import 'package:note_ui/screens/view_gallery/view_gallery.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -19,6 +20,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => NoteGalleryScreen(arguments: settings.arguments));
       case camera:
         return MaterialPageRoute(builder: (_) => TakePhotoScreen(args: settings.arguments));
+      case galleryView:
+        return MaterialPageRoute(builder: (_) => ViewGallery(arguments: settings.arguments));
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
