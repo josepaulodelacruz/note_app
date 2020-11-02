@@ -7,6 +7,7 @@ import 'package:note_common/bloc/note/note_observer.dart';
 import 'package:note_common/bloc/theme/theme_observer.dart';
 import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
+import 'package:note_common/api/note_api.dart';
 
 void main () {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,13 +17,12 @@ void main () {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => NoteCubit(InitialState()),
+          create: (_) => NoteCubit(NoteApi()),
         ),
         BlocProvider(
           create: (_) => ThemeCubit(Theming(false)),

@@ -1,17 +1,21 @@
 import 'package:bloc/bloc.dart';
+import 'package:note_common/api/note_api.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_common/models/sub_notes.dart';
+import 'package:note_common/services/note_services.dart';
+
 import 'package:uuid/uuid.dart';
 
 class NoteCubit extends Cubit<NoteState> {
+  NoteApi noteApi;
   List<SubNotes> sub = List<SubNotes>();
   List<NoteModel> notes = List<NoteModel>();
 
-  NoteCubit(NoteState state) : super(state);
+  NoteCubit(this.noteApi) : super(null);
 
-  void onLoading () {
+  void onLoading () async {
     emit(LoadingNoteState());
     Future.delayed(Duration(seconds: 2), () {
       emit(LoadedNoteState(notes));
@@ -76,6 +80,10 @@ class NoteCubit extends Cubit<NoteState> {
     int subIndex = notes[noteIndex].subNotes.indexWhere((subNotes) => subNotes.id == subNoteId);
     notes[noteIndex].subNotes[subIndex].photos = photos;
     emit(LoadedNoteState(notes));
+  }
+
+  void test() {
+    noteApi.test('testing');
   }
 
 }
