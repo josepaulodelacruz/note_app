@@ -7,6 +7,7 @@ import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/widgets/confirmation_modal.dart';
+import 'package:reorderables/reorderables.dart';
 
 class NoteGalleryScreen extends StatefulWidget {
   ScreenArguments arguments;
@@ -21,7 +22,6 @@ class NoteGalleryScreen extends StatefulWidget {
 class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   int _isSelected = 0;
   bool _isSelect = false;
-  ScrollController _scrollController = ScrollController();
   List<Pictures> _photos = List<Pictures>();
 
   @override
@@ -123,18 +123,20 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
             ),
           ],
         ),
-        body: _grid(),
+        body: _picGrid(),
       ),
     );
   }
 
-  Widget _grid () {
-    return GridView.builder(
-      controller: _scrollController,
-      itemCount: _photos.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 1),
-      itemBuilder: (BuildContext context, int index) {
-        Pictures pic = _photos[index];
+  Widget _picGrid () {
+    double height = MediaQuery.of(context).size.height * 0.20;
+    double width = MediaQuery.of(context).size.width * 0.30;
+    return ReorderableWrap(
+      padding: EdgeInsets.all(5.0),
+      minMainAxisCount: 3,
+      maxMainAxisCount: 3,
+      children: _photos.map((pic) {
+        int index = _photos.indexOf(pic);
         return InkWell(
           onTap: () {
             if(_isSelect) {
@@ -155,12 +157,23 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
             child: Card(
               child: Opacity(
                 opacity: pic.isSeleted == true ? 0.3 : 1,
-                child: Image.file(File(pic.imagePath), fit: BoxFit.cover)
+                child: Image.file(File(pic.imagePath), fit: BoxFit.cover, height: height, width: width),
               ),
             ),
           ),
         );
+      }).toList(),
+      onReorder: _onReorder,
+      onNoReorder: (int index) {
+        debugPrint('${DateTime.now().toString().substring(5, 22)} reorder cancelled. index:$index');
       },
     );
   }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      _photos.insert(newIndex, _photos.removeAt(oldIndex));
+    });
+  }
+
 }

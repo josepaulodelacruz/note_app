@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   StreamSubscription<HardwareButtons.VolumeButtonEvent> _volumeButtonSubscription;
+  var _imagePath;
 
   @override
   void initState () {
@@ -40,6 +42,9 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
       ResolutionPreset.ultraHigh,
     );
     _initializeControllerFuture = _controller.initialize();
+    _imagePath = widget.args.photos.isEmpty ?
+        ""  : widget.args.photos[0].imagePath
+        ?? "";
   }
 
   @override
@@ -59,13 +64,17 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
         '${id}.png',
       );
       await _controller.takePicture(path);
-      _cardDialogImage(path);
+      _cardDialogImage(path).then((res) {
+        setState(() {
+          _imagePath = path;
+        });
+      });
     } catch (e) {
       print(e);
     }
   }
 
-  _cardDialogImage (path) async {
+  Future<void> _cardDialogImage (path) async {
     BlocProvider
         .of<NoteCubit>(context)
         .addImage(
@@ -123,35 +132,46 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            color: Colors.white
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context, '/gallery',
+                                arguments: ScreenArguments(
+                                  photos: widget.args.photos,
+                                  noteId: widget.args.noteId,
+                                  subNoteId: widget.args.subNoteId,
+                                  index: 0,
+                                )
+                              );
+                            },
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Image.file(
+                                File(_imagePath),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                           ),
-                          Container(
-                            width: 50,
-                            height: 50,
-                            color: Colors.white
-                          )
                         ],
                       )
                     )
                   )
-
                 ],
               ),
             );
           } else {
-            // Otherwise, display a loading indicator.
             return Center(child: CircularProgressIndicator());
           }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _takePhoto();
-        },
+        onPressed: _takePhoto,
         child: Icon(Icons.camera),
       ),
     );

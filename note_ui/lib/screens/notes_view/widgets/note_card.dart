@@ -115,7 +115,7 @@ class NoteCard extends StatelessWidget {
         onPressed: () async {
           final cameras = await availableCameras();
           final firstCamera = cameras.first;
-          Navigator.pushNamed(context, '/camera', arguments: ScreenArguments(firstCamera: firstCamera, noteId: noteId, subNoteId: subNotes.id));
+          Navigator.pushNamed(context, '/camera', arguments: ScreenArguments(firstCamera: firstCamera, noteId: noteId, subNoteId: subNotes.id, photos: subNotes.photos));
         },
         icon: Icon(Icons.photo_album)
       ),
