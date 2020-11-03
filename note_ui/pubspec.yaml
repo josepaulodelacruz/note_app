@@ -37,6 +37,7 @@ dependencies:
   path: ^1.6.4
   hardware_buttons: ^1.0.0
   reorderables: ^0.3.2
+  hive_flutter: ^0.3.0+1
 
   note_common:
     path: ../note_common

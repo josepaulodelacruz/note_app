@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:note_common/api/change_theme_api.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
-import 'package:note_common/bloc/note/note_state.dart';
+import 'package:note_common/models/theme.dart';
+
 import 'package:note_ui/router.dart' as OnRouter;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_observer.dart';
@@ -8,11 +11,14 @@ import 'package:note_common/bloc/theme/theme_observer.dart';
 import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/api/note_api.dart';
+import 'package:hive/hive.dart';
 
-void main () {
+void main () async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = NoteObserver();
   Bloc.observer = ThemeObserver();
+  Hive.initFlutter();
+  Hive.registerAdapter(ThemeAdapter());
   runApp(MyApp());
 }
 
@@ -25,13 +31,13 @@ class MyApp extends StatelessWidget {
           create: (_) => NoteCubit(NoteApi()),
         ),
         BlocProvider(
-          create: (_) => ThemeCubit(Theming(false)),
+          create: (_) => ThemeCubit(Theming(false), ChangeThemeApi()),
         )
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           if(state is Theming) {
-            return  MaterialApp(
+            return MaterialApp(
               title: 'Notes Application',
               theme: state.enableTheme ? ThemeData(
                 scaffoldBackgroundColor: Colors.grey[200],

@@ -14,11 +14,17 @@ dependencies:
 
   bloc: ^6.0.0
   uuid: ^2.2.2
+  hive: ^1.4.4+1
+  hive_generator: ^0.8.2
+
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  build_runner:
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
