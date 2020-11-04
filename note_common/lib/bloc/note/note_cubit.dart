@@ -17,7 +17,10 @@ class NoteCubit extends Cubit<NoteState> {
 
   void onLoading () async {
     emit(LoadingNoteState());
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 2), () async {
+      await noteApi.onLoading().then((res) {
+        print('list: ${res}');
+      });
       emit(LoadedNoteState(notes));
     });
   }
@@ -82,8 +85,13 @@ class NoteCubit extends Cubit<NoteState> {
     emit(LoadedNoteState(notes));
   }
 
-  void test() {
-    noteApi.test('testing');
+  void test() async {
+    String title = 'testing';
+    String description = 'Testing description';
+    var uuid = Uuid();
+    final note = NoteModel(uuid.v4(), title, description);
+    notes.add(note);
+    await noteApi.addNote(notes);
   }
 
 }
