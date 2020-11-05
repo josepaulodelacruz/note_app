@@ -28,12 +28,6 @@ class _HomeScreenState extends State<HomeScreen>{
       builder: (context, state) {
         if(state is Theming)
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              context.bloc<NoteCubit>().test();
-            },
-            child: Icon(Icons.add),
-          ),
           key: _scaffoldKey,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(60),

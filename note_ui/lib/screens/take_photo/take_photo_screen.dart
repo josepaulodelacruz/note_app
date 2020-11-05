@@ -34,9 +34,6 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
   @override
   void initState () {
     super.initState();
-    _volumeButtonSubscription = HardwareButtons.volumeButtonEvents.listen((e) {
-      _takePhoto();
-    });
     _controller = CameraController(
       widget.args.firstCamera,
       ResolutionPreset.ultraHigh,
@@ -50,7 +47,6 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
   @override
   void dispose () {
     _controller.dispose();
-    _volumeButtonSubscription?.cancel();
     super.dispose();
   }
 
