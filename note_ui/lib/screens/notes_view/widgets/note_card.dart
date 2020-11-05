@@ -83,7 +83,7 @@ class NoteCard extends StatelessWidget {
       child: CarouselSlider.builder(
         itemCount: subNotes.photos.length,
         itemBuilder: (context, int itemIndex) {
-          Pictures pp = subNotes.photos[itemIndex];
+          Photo pp = subNotes.photos[itemIndex];
           return GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/gallery', arguments: ScreenArguments(photos: subNotes.photos, index: itemIndex, noteId: noteId, subNoteId: subNotes.id));

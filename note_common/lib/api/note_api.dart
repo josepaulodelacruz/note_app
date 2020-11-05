@@ -9,22 +9,39 @@ class NoteApi extends NoteService {
   @override
   Future<List<NoteModel>> onLoading () async {
     return await storageApi.openStorageBox('notes').then((box) {
-      return box.get('notes');
+      List<dynamic> notes = box.get('notes');
+      List<NoteModel> a = notes?.map((note) {
+        return NoteModel(
+          note.id,
+          note.title,
+          note.description,
+          subNotes: note.subNotes,
+        );
+      })?.toList() ?? [];
+      return a;
     });
   }
 
-
   @override
-  void test(String a) {
-    // TODO: implement test
-    print(a);
-    print('DEEP NOTE API CALLED');
+  Future<List<NoteModel>> addNote (List<NoteModel> notes) async {
+    storageApi.openStorageBox('notes').then((box) {
+      box.put('notes', notes);
+      box.close();
+    });
   }
 
   @override
-  Future<List<NoteModel>> addNote (List<NoteModel> noteModel) async {
+  Future<List<NoteModel>> updateNote (List<NoteModel> notes) async {
     storageApi.openStorageBox('notes').then((box) {
-      box.put('notes', noteModel);
+      box.put('notes', notes);
+      box.close();
+    });
+  }
+
+  @override
+  void deleteAll () {
+    storageApi.openStorageBox('notes').then((box) {
+      box.deleteFromDisk();
     });
   }
 

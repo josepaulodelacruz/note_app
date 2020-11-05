@@ -4,6 +4,8 @@ import 'package:note_common/api/change_theme_api.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/models/theme.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:note_common/models/sub_notes.dart';
+import 'package:note_common/models/pictures.dart';
 
 import 'package:note_ui/router.dart' as OnRouter;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +23,8 @@ void main () async {
   Hive.initFlutter();
   Hive.registerAdapter(ThemeAdapter());
   Hive.registerAdapter(NoteModelAdapter());
+  Hive.registerAdapter(SubNotesAdapter());
+  Hive.registerAdapter(PhotoAdapter());
   runApp(MyApp());
 }
 

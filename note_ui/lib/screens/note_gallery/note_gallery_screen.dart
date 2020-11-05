@@ -22,7 +22,7 @@ class NoteGalleryScreen extends StatefulWidget {
 class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   int _isSelected = 0;
   bool _isSelect = false;
-  List<Pictures> _photos = List<Pictures>();
+  List<Photo> _photos = List<Photo>();
 
   @override
   void initState () {

@@ -6,7 +6,7 @@ class ScreenArguments {
   String noteId;
   CameraDescription firstCamera;
   String subNoteId;
-  List<Pictures> photos;
+  List<Photo> photos;
 
   ScreenArguments({
     this.noteId,

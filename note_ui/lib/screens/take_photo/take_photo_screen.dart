@@ -151,10 +151,10 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-                              child: Image.file(
+                              child: _imagePath != '' ? Image.file(
                                 File(_imagePath),
                                 fit: BoxFit.fill,
-                              ),
+                              ) : SizedBox(),
                             ),
                           ),
                         ],

@@ -29,8 +29,4 @@ class NoteModel extends HiveObject {
     };
   }
 
-  factory NoteModel.fromMap(Map<String, dynamic> map) {
-  }
-
-
 }
