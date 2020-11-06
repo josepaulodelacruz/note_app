@@ -92,6 +92,18 @@ class NoteCubit extends Cubit<NoteState> {
     emit(LoadedNoteState(notes));
   }
 
+  void arrangeImage (
+      String noteId,
+      String subNoteId,
+      List<Photo> photos,
+    ) async {
+      int noteIndex = notes.indexWhere((note) => note.id == noteId);
+      int subIndex = notes[noteIndex].subNotes.indexWhere((subNotes) => subNotes.id == subNoteId);
+      notes[noteIndex].subNotes[subIndex].photos = photos;
+      await noteApi.updateNote(notes);
+      emit(LoadedNoteState(notes));
+  }
+
   void test() async {
     await noteApi.deleteAll();
   }

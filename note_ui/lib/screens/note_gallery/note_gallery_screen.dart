@@ -51,6 +51,8 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
 
   @override
   Widget build(BuildContext context) {
+    print(widget.arguments.noteId);
+    print(widget.arguments.subNoteId);
     return WillPopScope(
       onWillPop: () {
         _unSelectItem();
@@ -149,7 +151,10 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                 }
               });
             } else {
-              Navigator.pushNamed(context, '/gallery-view', arguments: ScreenArguments(photos: _photos, index: index));
+              Navigator.pushNamed(context,'/gallery-view', arguments: ScreenArguments(
+                photos: _photos,
+                index: index)
+              );
             }
           },
           child: Hero(
@@ -174,6 +179,11 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
     setState(() {
       _photos.insert(newIndex, _photos.removeAt(oldIndex));
     });
+    context.bloc<NoteCubit>().arrangeImage(
+      widget.arguments.noteId,
+      widget.arguments.subNoteId,
+      _photos,
+    );
   }
 
 }
