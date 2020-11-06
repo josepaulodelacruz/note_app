@@ -26,7 +26,6 @@ class NoteApi extends NoteService {
   Future<List<NoteModel>> addNote (List<NoteModel> notes) async {
     storageApi.openStorageBox('notes').then((box) {
       box.put('notes', notes);
-      box.close();
     });
   }
 
@@ -34,7 +33,6 @@ class NoteApi extends NoteService {
   Future<List<NoteModel>> updateNote (List<NoteModel> notes) async {
     storageApi.openStorageBox('notes').then((box) {
       box.put('notes', notes);
-      box.close();
     });
   }
 
