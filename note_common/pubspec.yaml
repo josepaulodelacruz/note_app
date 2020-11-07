@@ -17,6 +17,7 @@ dependencies:
   hive: ^1.4.4+1
   hive_generator: ^0.8.2
   bloc_test: ^7.1.0
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

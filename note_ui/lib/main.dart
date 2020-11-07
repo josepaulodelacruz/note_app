@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:note_common/api/change_theme_api.dart';
+import 'package:note_common/api/storage_api.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/models/theme.dart';
 import 'package:note_common/models/note_model.dart';
@@ -15,12 +16,14 @@ import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/api/note_api.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main () async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = NoteObserver();
   Bloc.observer = ThemeObserver();
-  Hive.initFlutter();
+  var dir = await getApplicationDocumentsDirectory();
+  Hive.initFlutter(dir.path);
   Hive.registerAdapter(ThemeAdapter());
   Hive.registerAdapter(NoteModelAdapter());
   Hive.registerAdapter(SubNotesAdapter());
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
           create: (_) => NoteCubit(NoteApi()),
         ),
         BlocProvider(
-          create: (_) => ThemeCubit(Theming(false), ChangeThemeApi()),
+          create: (_) => ThemeCubit(Theming(), ChangeThemeApi()),
         )
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(

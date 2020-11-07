@@ -8,9 +8,11 @@ class ChangeThemeApi extends ThemeServices {
 
   @override
   Future<Theme> loadTheme() async {
+    Theme isTheme = Theme()
+      ..theme = false;
     return await storageApi.openStorageBox('theme-box').then((box) {
-      Theme boxTheme = box.get('theme');
-      print('initial Theme: ${boxTheme.theme}');
+      Theme boxTheme = box.get('theme', defaultValue: isTheme);
+      print(boxTheme);
       return boxTheme;
     });
   }

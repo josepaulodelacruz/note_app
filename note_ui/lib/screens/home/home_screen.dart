@@ -17,9 +17,13 @@ class _HomeScreenState extends State<HomeScreen>{
 
   @override
   void initState () {
-    BlocProvider.of<NoteCubit>(context).onLoading();
-    BlocProvider.of<ThemeCubit>(context).loadTheme();
+    init();
     super.initState();
+  }
+
+  Future<void> init () async {
+    await BlocProvider.of<ThemeCubit>(context).loadTheme();
+    BlocProvider.of<NoteCubit>(context).onLoading();
   }
 
   @override

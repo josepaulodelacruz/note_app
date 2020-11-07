@@ -6,5 +6,6 @@ abstract class ThemeState {}
 class Theming extends ThemeState {
   final bool enableTheme;
 
-  Theming(this.enableTheme);
+  Theming({this.enableTheme = false});
+
 }

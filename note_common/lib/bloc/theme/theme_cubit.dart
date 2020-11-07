@@ -12,14 +12,13 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   Future<bool> loadTheme () async {
     Theme isEnable = await changeThemeApi.loadTheme();
-    emit(Theming(isEnable.theme));
+    emit(Theming(enableTheme: isEnable.theme));
     return isEnable.theme;
   }
 
   void changeTheme (theme) async {
     Theme isEnable = await changeThemeApi.changeTheme(theme);
-    print('Themeing ${isEnable.theme}');
-    emit(Theming(isEnable.theme));
+    emit(Theming(enableTheme: isEnable.theme));
   }
 
 }
