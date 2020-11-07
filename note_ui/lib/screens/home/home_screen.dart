@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
@@ -5,7 +7,9 @@ import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/screens/home/widgets/navbar.dart';
+import 'package:note_ui/utils/get_initials.dart';
 import 'package:note_ui/widgets/custom_bottom_appbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen>{
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
+//              context.bloc<NoteCubit>().test();
               Navigator.pushNamed(context, '/add');
             },
           ),
@@ -80,11 +85,18 @@ class _HomeScreenState extends State<HomeScreen>{
     );
   }
 
-  Widget _noteCard (BuildContext context, note) {
+  Widget _noteCard (BuildContext context, NoteModel note) {
+    final _title = !note.checkIfNull() ?
+        getInitials(string: note.title, limitTo: 2) : "";
+    print(note.checkIfNull());
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       width: MediaQuery.of(context).size.width * 0.90,
       child: ListTile(
+        leading: CircleAvatar(
+          radius: 30,
+          child: Text(_title),
+        ),
         title: Text(note.title),
         subtitle: Text(note.description),
         trailing: IconButton(

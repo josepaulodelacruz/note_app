@@ -29,4 +29,8 @@ class NoteModel extends HiveObject {
     };
   }
 
+  bool checkIfNull () {
+    return [id, title, description, subNotes].contains(null);
+  }
+
 }

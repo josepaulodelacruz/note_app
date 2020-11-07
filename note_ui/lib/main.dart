@@ -49,6 +49,10 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               title: 'Notes Application',
               theme: state.enableTheme ? ThemeData(
+                accentIconTheme: IconThemeData(
+                  color: Colors.black,
+                ),
+                floatingActionButtonTheme: FloatingActionButtonThemeData(),
                 scaffoldBackgroundColor: Colors.grey[200],
                 buttonColor: Colors.lightBlueAccent,
                 appBarTheme: AppBarTheme(
