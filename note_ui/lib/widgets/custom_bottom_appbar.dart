@@ -16,8 +16,9 @@ class CustomBottomAppBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(icon: Icon(Icons.search), onPressed: () {},),
-            IconButton(icon: Icon(Icons.menu), onPressed: () {
+            IconButton(icon: Icon(Icons.search), onPressed: () {
+            }),
+            IconButton(icon: Icon(Icons.wb_sunny_outlined), onPressed: () {
               BlocProvider.of<ThemeCubit>(context).changeTheme(state.enableTheme);
             }),
           ],

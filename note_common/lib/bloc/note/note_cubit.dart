@@ -74,12 +74,20 @@ class NoteCubit extends Cubit<NoteState> {
   }
 
   void addImage (String imagePath, String noteId, String subNoteId) async {
+
     int noteIndex = notes.indexWhere((note) => note.id == noteId);
     int subIndex = notes[noteIndex].subNotes.indexWhere((subNotes) => subNotes.id == subNoteId);
+
     var uuid = Uuid();
     String id = uuid.v4();
     Photo picture = Photo(id: id, imagePath: imagePath);
+
+    notes[noteIndex].coverPhoto =
+        notes[noteIndex].coverPhoto == null ?
+        picture.imagePath : notes[noteIndex].coverPhoto;
+
     notes[noteIndex].subNotes[subIndex].photos.add(picture);
+    print('cubit: ${notes[noteIndex].coverPhoto}');
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }

@@ -16,6 +16,7 @@ class NoteApi extends NoteService {
           note.title,
           note.description,
           subNotes: note.subNotes,
+          coverPhoto: note.coverPhoto,
         );
       })?.toList() ?? [];
       return a;

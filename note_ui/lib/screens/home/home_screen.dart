@@ -86,18 +86,19 @@ class _HomeScreenState extends State<HomeScreen>{
   }
 
   Widget _noteCard (BuildContext context, NoteModel note) {
-    final _title = !note.checkIfNull() ?
-        getInitials(string: note.title, limitTo: 2) : "";
-    print(note.checkIfNull());
+    final _title = note.checkIfNull() ?
+        getInitials(title: note.title) : note.coverPhoto;
+    print('note: ${note.coverPhoto}');
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       width: MediaQuery.of(context).size.width * 0.90,
       child: ListTile(
-        leading: CircleAvatar(
-          radius: 30,
-          child: Text(_title),
-        ),
-        title: Text(note.title),
+        leading: note.coverPhoto == null ?
+          CircleAvatar(
+            radius: 20,
+            child: Text(_title)) :
+          Image.file(File(note.coverPhoto), fit: BoxFit.cover),
+        title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
         subtitle: Text(note.description),
         trailing: IconButton(
           onPressed: () {

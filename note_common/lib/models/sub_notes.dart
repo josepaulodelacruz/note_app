@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:note_common/models/pictures.dart';
 
@@ -24,5 +25,9 @@ class SubNotes extends HiveObject {
     this.subTitle,
     {this.photos}
   );
+
+  bool checkIfNull () {
+    return [id, isDate, title, subTitle, photos].contains(null);
+  }
 
 }

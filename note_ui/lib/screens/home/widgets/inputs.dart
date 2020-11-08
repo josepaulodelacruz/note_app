@@ -19,6 +19,12 @@ class InputCard extends StatelessWidget {
                 controller: controller,
                 onChanged: (value) {
                 },
+                validator: (value) {
+                  if(value.isEmpty) {
+                    return 'Please Enter some Text';
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,

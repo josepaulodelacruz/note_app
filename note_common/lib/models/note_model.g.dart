@@ -21,13 +21,14 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       fields[1] as String,
       fields[2] as String,
       subNotes: (fields[3] as List)?.cast<SubNotes>(),
+      coverPhoto: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, NoteModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       ..writeByte(2)
       ..write(obj.description)
       ..writeByte(3)
-      ..write(obj.subNotes);
+      ..write(obj.subNotes)
+      ..writeByte(4)
+      ..write(obj.coverPhoto);
   }
 
   @override

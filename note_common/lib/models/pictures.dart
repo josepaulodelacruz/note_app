@@ -13,4 +13,8 @@ class Photo extends HiveObject {
   bool isSeleted;
 
   Photo({this.id, this.imagePath, this.isSeleted = false});
+
+  bool checkIfNull () {
+    return [id, imagePath, isSeleted].contains(null);
+  }
 }

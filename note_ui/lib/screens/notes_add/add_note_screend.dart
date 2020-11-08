@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
+import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/screens/home/widgets/inputs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_ui/utils/appbar_shape.dart';
@@ -16,6 +17,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> with
   AnimationController _controller;
   final _title = TextEditingController();
   final _description = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
 
   @override
   void initState () {
@@ -41,25 +44,31 @@ class _AddNoteScreenState extends State<AddNoteScreen> with
       body: Container(
         padding: EdgeInsets.only(top: 10),
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            InputCard(
-              controller: _title,
-              field: 'Title',
-            ),
-            InputCard(
-              controller: _description,
-              field: 'Description',
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InputCard(
+                controller: _title,
+                field: 'Title',
+              ),
+              InputCard(
+                controller: _description,
+                field: 'Description',
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.bloc<NoteCubit>().addNote(_title.text, _description.text);
-          Navigator.of(context).pop();
+          if(_formKey.currentState.validate()) {
+            context.bloc<NoteCubit>().addNote(_title.text, _description.text);
+            Navigator.of(context).pop();
+          }
+
         },
         child: Icon(Icons.check),
       ),
