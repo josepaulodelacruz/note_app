@@ -88,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen>{
   Widget _noteCard (BuildContext context, NoteModel note) {
     final _title = note.checkIfNull() ?
         getInitials(title: note.title) : note.coverPhoto;
-    print('note: ${note.coverPhoto}');
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       width: MediaQuery.of(context).size.width * 0.90,
@@ -99,10 +98,10 @@ class _HomeScreenState extends State<HomeScreen>{
             child: Text(_title)) :
           Image.file(File(note.coverPhoto), fit: BoxFit.cover),
         title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
-        subtitle: Text(note.description),
+        subtitle: Text(note.description, overflow: TextOverflow.ellipsis),
         trailing: IconButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description, subNotes: note.subNotes));
+            Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description, subNotes: note.subNotes, coverPhoto: note.coverPhoto));
           },
           icon: Icon(Icons.arrow_forward_ios),
         ),

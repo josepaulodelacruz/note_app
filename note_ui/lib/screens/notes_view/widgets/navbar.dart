@@ -20,50 +20,55 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(noteModel.title),
-      actions: [
-        PopupMenuButton(
-          onSelected: (value) {
-            if(value == 'delete') {
-              showDialog(
-                context: context,
-                child: ConfirmationModal(
-                  handle: () {
-                    context.bloc<NoteCubit>().deleteNote(noteModel.id);
-                    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-                  },
-                ),
-              );
-            } else if(value == 'edit') {
-              return showDialog(
-                context: context,
-                builder: (_) => EditModal(
-                  noteModel: noteModel,
-                  newTitle: newTitle,
-                  newDescription: newDescription,
-                ),
-              );
-            } else {
-              renderBottomModal();
-            }
-          },
-          itemBuilder: (_) => <PopupMenuItem<String>>[
-            new PopupMenuItem<String>(
-              value: 'add',
-              child: Text('Add Notes'),
-            ),
-            new PopupMenuItem<String>(
-              value: 'edit',
-              child: Text('Edit Notes'),
-            ),
-            new PopupMenuItem<String>(
-              value: 'delete',
-              child: Text('Delete Notes'),
-            ),
-          ],
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      child: Row(
+        children: [
+          IconButton(icon: Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+//          Text('${noteModel.title}', style: Theme.of(context).textTheme.headline6),
+          Spacer(),
+          PopupMenuButton(
+            onSelected: (value) {
+              if(value == 'delete') {
+                showDialog(
+                  context: context,
+                  child: ConfirmationModal(
+                    handle: () {
+                      context.bloc<NoteCubit>().deleteNote(noteModel.id);
+                      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                    },
+                  ),
+                );
+              } else if(value == 'edit') {
+                return showDialog(
+                  context: context,
+                  builder: (_) => EditModal(
+                    noteModel: noteModel,
+                    newTitle: newTitle,
+                    newDescription: newDescription,
+                  ),
+                );
+              } else {
+                renderBottomModal();
+              }
+            },
+            itemBuilder: (_) => <PopupMenuItem<String>>[
+              new PopupMenuItem<String>(
+                value: 'add',
+                child: Text('Add Notes'),
+              ),
+              new PopupMenuItem<String>(
+                value: 'edit',
+                child: Text('Edit Notes'),
+              ),
+              new PopupMenuItem<String>(
+                value: 'delete',
+                child: Text('Delete Notes'),
+              ),
+            ],
+          ),
+        ],
+      )
     );
   }
 }

@@ -43,27 +43,20 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeCubit(Theming(), ChangeThemeApi()),
         )
       ],
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          if(state is Theming) {
-            return MaterialApp(
-              title: 'Notes Application',
-              theme: state.enableTheme ? ThemeData(
-                floatingActionButtonTheme: FloatingActionButtonThemeData(),
-                scaffoldBackgroundColor: Colors.grey[200],
-                buttonColor: Colors.lightBlueAccent,
-                appBarTheme: AppBarTheme(
-                  color: Colors.lightBlueAccent,
-                ),
-              ) : ThemeData.dark(),
-              initialRoute: '/',
-              onGenerateRoute: OnRouter.Router.generateRoute,
-            );
-          } else {
-            return SizedBox();
-          }
-        }
-      ),
+      child: MaterialApp(
+        title: 'Notes Application',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          floatingActionButtonTheme: FloatingActionButtonThemeData(),
+          buttonColor: Colors.lightBlueAccent,
+          scaffoldBackgroundColor: Colors.black54,
+          textTheme: TextTheme(
+            caption: TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
+          )
+        ),
+        initialRoute: '/',
+        onGenerateRoute: OnRouter.Router.generateRoute,
+      )
     );
   }
 }

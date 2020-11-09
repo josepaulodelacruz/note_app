@@ -1,12 +1,27 @@
+import 'dart:io';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 import 'package:note_ui/screens/notes_view/widgets/navbar.dart';
 import 'package:note_ui/screens/notes_view/widgets/note_card.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
+import 'package:note_ui/widgets/confirmation_modal.dart';
+
+final List<String> imgList = [
+  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+];
+
 
 class NoteViewScreen extends StatefulWidget {
   NoteModel noteModel;
@@ -50,66 +65,221 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: NavBar(
-          noteModel: noteModel,
-          newTitle: _newTitle,
-          newDescription: _newDescription,
-          renderBottomModal: () {
-            return showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (_) => SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: BottomModal(
-                    noteModel: noteModel,
-                    selectedDate: selectedDate,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _upperHeader(),
+              _upperSubtitle(),
+              _albumSlider(),
+            ],
+          ),
+        )
+      )
+    );
+  }
+
+
+  Widget _upperHeader () {
+    return Container(
+      height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.50,
+        child: Stack(
+          children: [
+            if(noteModel.coverPhoto != null ) ...[
+              Container(
+                child: Opacity(
+                  opacity: 0.8,
+                  child: Image.file(
+                    File(noteModel.coverPhoto),
+                    fit: BoxFit.cover,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                   ),
                 ),
-              )
-            );
-          },
-        ),
-      ),
-      body: ListView(
-        physics: ClampingScrollPhysics(),
-        children: noteModel.subNotes?.map((note) {
-          int index = noteModel.subNotes.indexOf(note);
-          return NoteCard(
-            noteId: noteModel.id,
-            subNotes: note,
-            onHandle: (String value) async {
-              switch(value) {
-                case 'view':
-                  break;
-                case 'edit':
-                  return showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (_) => SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: BottomModal(
-                          isEdit: true,
-                          editSubNotes: note,
-                          noteModel: noteModel,
-                          selectedDate: noteModel.subNotes[index].isDate,
-                          index: index,
-                        ),
+              ),
+            ],
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xCC000000),
+                    const Color(0x00000000),
+                    const Color(0x00000000),
+                    Colors.black87,
+                  ],
+                ),
+              ),
+            ),
+            NavBar(
+              noteModel: noteModel,
+              newTitle: _newTitle,
+              newDescription: _newDescription,
+              renderBottomModal: () {
+                return showModalBottomSheet(
+                  context: context,
+                  builder: (_) => SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: BottomModal(
+                        noteModel: noteModel,
+                        selectedDate: selectedDate,
                       ),
                     )
-                  );
-                  break;
-                case 'delete':
-                  context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
-                  break;
-              }
-            },
-          );
-        })?.toList() ?? [],
+                  )
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 32.0),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  noteModel.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline3,
+                ),
+              ),
+            )
+          ],
+        )
+    );
+  }
+
+  Widget _upperSubtitle () {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(Icons.photo_album_sharp),
+//              Text(noteModel.subNotes.length.toString()),
+              Spacer(),
+              IconButton(
+                onPressed: () {
+                },
+                icon: Icon(Icons.add_comment),
+              )
+            ],
+          ),
+          Divider(thickness: 2),
+          Text(
+              noteModel.description.toUpperCase(),
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.caption
+          ),
+        ],
+      )
+    );
+  }
+
+  Widget _albumSlider () {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text('Collections', style: Theme.of(context).textTheme.subtitle1),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 32),
+            child: Divider(thickness: 2),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.15,
+            padding: EdgeInsets.only(left: 32),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                
+              ],
+            )
+          )
+        ],
       ),
     );
   }
+
+
+
+//  @override
+//  Widget build(BuildContext context) {
+//    print('view ${noteModel.coverPhoto}');
+//    return Scaffold(
+//      appBar: PreferredSize(
+//        preferredSize: Size.fromHeight(60),
+//        child: NavBar(
+//          noteModel: noteModel,
+//          newTitle: _newTitle,
+//          newDescription: _newDescription,
+//          renderBottomModal: () {
+//            return showModalBottomSheet(
+//              context: context,
+//              isScrollControlled: true,
+//              builder: (_) => SingleChildScrollView(
+//                child: Container(
+//                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//                  child: BottomModal(
+//                    noteModel: noteModel,
+//                    selectedDate: selectedDate,
+//                  ),
+//                ),
+//              )
+//            );
+//          },
+//        ),
+//      ),
+//      body: ListView(
+//        physics: ClampingScrollPhysics(),
+//        children: noteModel.subNotes?.map((note) {
+//          int index = noteModel.subNotes.indexOf(note);
+//          return NoteCard(
+//            noteId: noteModel.id,
+//            subNotes: note,
+//            onHandle: (String value) async {
+//              switch(value) {
+//                case 'view':
+//                  break;
+//                case 'edit':
+//                  return showModalBottomSheet(
+//                    context: context,
+//                    isScrollControlled: true,
+//                    builder: (_) => SingleChildScrollView(
+//                      child: Container(
+//                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//                        child: BottomModal(
+//                          isEdit: true,
+//                          editSubNotes: note,
+//                          noteModel: noteModel,
+//                          selectedDate: noteModel.subNotes[index].isDate,
+//                          index: index,
+//                        ),
+//                      ),
+//                    )
+//                  );
+//                  break;
+//                case 'delete':
+//                  context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
+//                  break;
+//              }
+//            },
+//          );
+//        })?.toList() ?? [],
+//      ),
+//    );
+//  }
 }

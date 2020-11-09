@@ -13,28 +13,29 @@ class InputCard extends StatelessWidget {
       children: [
         Text('${field}: ', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 17)),
         Container(
-            width: MediaQuery.of(context).size.width * 0.90,
-            child: Card(
-              child: TextFormField(
-                controller: controller,
-                onChanged: (value) {
-                },
-                validator: (value) {
-                  if(value.isEmpty) {
-                    return 'Please Enter some Text';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintText: 'Input ${field}'
-                ),
+          width: MediaQuery.of(context).size.width * 0.90,
+          child: Card(
+            child: TextFormField(
+              controller: controller,
+              onChanged: (value) {
+              },
+              validator: (value) {
+                if(value.isEmpty) {
+                  return 'Please Enter some Text';
+                }
+                return null;
+              },
+              maxLines: field ==  'Description' ? 7 : 1,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                hintText: 'Input ${field}',
               ),
-            )
+            ),
+          )
         ),
       ]
     );
