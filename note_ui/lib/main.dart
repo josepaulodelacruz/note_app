@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.black54,
           textTheme: TextTheme(
             caption: TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
-          )
+          ),
         ),
         initialRoute: '/',
         onGenerateRoute: OnRouter.Router.generateRoute,

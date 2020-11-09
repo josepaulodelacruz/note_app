@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 import 'package:note_ui/screens/notes_view/widgets/navbar.dart';
 import 'package:note_ui/screens/notes_view/widgets/note_card.dart';
@@ -96,6 +97,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                   child: Image.file(
                     File(noteModel.coverPhoto),
                     fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height,
                     width: MediaQuery
                         .of(context)
                         .size
@@ -157,14 +159,13 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   }
 
   Widget _upperSubtitle () {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+          child: Row(
             children: [
               Icon(Icons.photo_album_sharp),
-//              Text(noteModel.subNotes.length.toString()),
               Spacer(),
               IconButton(
                 onPressed: () {
@@ -173,14 +174,20 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
               )
             ],
           ),
-          Divider(thickness: 2),
-          Text(
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 32),
+          child: Divider(thickness: 2),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+          child: Text(
               noteModel.description.toUpperCase(),
               textAlign: TextAlign.start,
               style: Theme.of(context).textTheme.caption
           ),
-        ],
-      )
+        ),
+      ],
     );
   }
 
@@ -204,82 +211,100 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
             padding: EdgeInsets.only(left: 32),
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: [
-                
-              ],
-            )
-          )
+              physics: ClampingScrollPhysics(),
+              children: noteModel.subNotes?.map((note) {
+                int index = noteModel.subNotes.indexOf(note);
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey[500],
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  width: MediaQuery.of(context).size.width * 0.30,
+                  child: Card(
+                    child: Stack(
+                      children: [
+                        if(note.photos.length > 0) ...[
+                          Align(
+                            alignment: Alignment.center,
+                            child: Image.file(File(note.photos[0].imagePath), fit: BoxFit.cover, width: 150),
+                          ),
+                        ],
+                        Align(
+                          alignment: Alignment.center,
+                          child: PopupMenuButton(
+                            icon: Icon(Icons.add_box),
+                            onSelected: (value) {
+                              switch(value) {
+                                case 'view':
+                                  Navigator
+                                    .pushNamed(
+                                    context, '/gallery',
+                                    arguments: ScreenArguments(
+                                      photos: note.photos,
+                                      index: index,
+                                      noteId: noteModel.id,
+                                      subNoteId: note.id)
+                                    );
+                                  break;
+                                case 'edit':
+                                  return showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (_) => SingleChildScrollView(
+                                      child: Container(
+                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: BottomModal(
+                                          isEdit: true,
+                                          editSubNotes: note,
+                                          noteModel: noteModel,
+                                          selectedDate: noteModel.subNotes[index].isDate,
+                                          index: index,
+                                        ),
+                                      ),
+                                    )
+                                  );
+                                  break;
+                                case 'delete':
+                                  context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
+                                  break;
+                              }
+                            },
+                            itemBuilder: (_) => <PopupMenuItem<String>>[
+                              new PopupMenuItem<String>(
+                                value: 'view',
+                                child: Text('Gallery'),
+                              ),
+                              new PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Text('Edit'),
+                              ),
+                              new PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Text('Delete'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('${note.isDate.month}/${note.isDate.day}/${note.isDate.year}', style: Theme.of(context).textTheme.caption)
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text('${note.title}', style: Theme.of(context).textTheme.caption)
+                        )
+                      ],
+                    )
+                  ),
+                );
+              })?.toList() ?? []
+            ),
+          ),
         ],
       ),
     );
   }
-
-
-
-//  @override
-//  Widget build(BuildContext context) {
-//    print('view ${noteModel.coverPhoto}');
-//    return Scaffold(
-//      appBar: PreferredSize(
-//        preferredSize: Size.fromHeight(60),
-//        child: NavBar(
-//          noteModel: noteModel,
-//          newTitle: _newTitle,
-//          newDescription: _newDescription,
-//          renderBottomModal: () {
-//            return showModalBottomSheet(
-//              context: context,
-//              isScrollControlled: true,
-//              builder: (_) => SingleChildScrollView(
-//                child: Container(
-//                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-//                  child: BottomModal(
-//                    noteModel: noteModel,
-//                    selectedDate: selectedDate,
-//                  ),
-//                ),
-//              )
-//            );
-//          },
-//        ),
-//      ),
-//      body: ListView(
-//        physics: ClampingScrollPhysics(),
-//        children: noteModel.subNotes?.map((note) {
-//          int index = noteModel.subNotes.indexOf(note);
-//          return NoteCard(
-//            noteId: noteModel.id,
-//            subNotes: note,
-//            onHandle: (String value) async {
-//              switch(value) {
-//                case 'view':
-//                  break;
-//                case 'edit':
-//                  return showModalBottomSheet(
-//                    context: context,
-//                    isScrollControlled: true,
-//                    builder: (_) => SingleChildScrollView(
-//                      child: Container(
-//                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-//                        child: BottomModal(
-//                          isEdit: true,
-//                          editSubNotes: note,
-//                          noteModel: noteModel,
-//                          selectedDate: noteModel.subNotes[index].isDate,
-//                          index: index,
-//                        ),
-//                      ),
-//                    )
-//                  );
-//                  break;
-//                case 'delete':
-//                  context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
-//                  break;
-//              }
-//            },
-//          );
-//        })?.toList() ?? [],
-//      ),
-//    );
-//  }
 }

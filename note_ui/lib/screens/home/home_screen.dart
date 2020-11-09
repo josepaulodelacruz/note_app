@@ -7,7 +7,6 @@ import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_common/bloc/theme/theme_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/screens/home/widgets/navbar.dart';
 import 'package:note_ui/utils/get_initials.dart';
 import 'package:note_ui/widgets/custom_bottom_appbar.dart';
@@ -95,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen>{
         leading: note.coverPhoto == null ?
           CircleAvatar(
             radius: 20,
+            backgroundColor: Colors.black12,
             child: Text(_title)) :
           Image.file(File(note.coverPhoto), fit: BoxFit.cover),
         title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),

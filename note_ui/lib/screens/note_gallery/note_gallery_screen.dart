@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
@@ -76,8 +75,20 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
               )
             ],
             PopupMenuButton(
-              onSelected: (value) {
+              onSelected: (value) async {
                 switch(value) {
+                  case 'add':
+                    final cameras = await availableCameras();
+                    final firstCamera = cameras.first;
+                    Navigator
+                      .pushNamed(
+                      context, '/camera',
+                      arguments: ScreenArguments(
+                          firstCamera: firstCamera,
+                          noteId: widget.arguments.noteId,
+                          subNoteId: widget.arguments.subNoteId,
+                          photos: widget.arguments.photos));
+                    break;
                   case 'select':
                     setState(() {
                       _isSelect = !_isSelect;
@@ -111,6 +122,10 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                 }
               },
               itemBuilder: (_) => <PopupMenuItem<String>>[
+                new PopupMenuItem<String>(
+                  value: 'add',
+                  child: Text('Add Picture'),
+                ),
                 new PopupMenuItem<String>(
                   value: 'select',
                   child: Text(_isSelect ? 'Unselect' : 'Select'),
