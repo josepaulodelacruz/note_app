@@ -66,6 +66,29 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: NavBar(
+          noteModel: noteModel,
+          newTitle: _newTitle,
+          newDescription: _newDescription,
+          renderBottomModal: () {
+            return showModalBottomSheet(
+                context: context,
+                builder: (_) => SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: BottomModal(
+                        noteModel: noteModel,
+                        selectedDate: selectedDate,
+                      ),
+                    )
+                )
+            );
+          },
+        ),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -120,25 +143,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                 ),
               ),
             ),
-            NavBar(
-              noteModel: noteModel,
-              newTitle: _newTitle,
-              newDescription: _newDescription,
-              renderBottomModal: () {
-                return showModalBottomSheet(
-                  context: context,
-                  builder: (_) => SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: BottomModal(
-                        noteModel: noteModel,
-                        selectedDate: selectedDate,
-                      ),
-                    )
-                  )
-                );
-              },
-            ),
+            
             Padding(
               padding: const EdgeInsets.only(left: 32.0),
               child: Align(

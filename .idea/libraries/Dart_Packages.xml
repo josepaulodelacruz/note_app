@@ -1098,6 +1098,7 @@
       <root url="file://C:/flutter/packages/flutter_test/lib" />
       <root url="file://C:/flutter/packages/flutter_web_plugins/lib" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>

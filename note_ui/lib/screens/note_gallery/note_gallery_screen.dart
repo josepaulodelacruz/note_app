@@ -3,6 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
+import 'package:note_common/bloc/note/note_state.dart';
+import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/widgets/confirmation_modal.dart';
@@ -19,6 +21,7 @@ class NoteGalleryScreen extends StatefulWidget {
 }
 
 class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
+  NoteModel noteModel;
   int _isSelected = 0;
   bool _isSelect = false;
   List<Photo> _photos = List<Photo>();
@@ -27,6 +30,17 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   void initState () {
     super.initState();
     _photos = widget.arguments.photos;
+    BlocProvider.of<NoteCubit>(context).listen((state) {
+      if(state is LoadedNoteState) {
+        NoteModel a = 
+            state.notes.firstWhere((note) => widget.arguments.noteId == note.id, orElse: () => null);
+        if(mounted) {
+          setState(() {
+            noteModel = a;
+          });
+        }
+      }
+    });
   }
 
   void _unSelectAll () {
@@ -50,8 +64,6 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
 
   @override
   Widget build(BuildContext context) {
-    print(widget.arguments.noteId);
-    print(widget.arguments.subNoteId);
     return WillPopScope(
       onWillPop: () {
         _unSelectItem();
@@ -77,18 +89,6 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
             PopupMenuButton(
               onSelected: (value) async {
                 switch(value) {
-                  case 'add':
-                    final cameras = await availableCameras();
-                    final firstCamera = cameras.first;
-                    Navigator
-                      .pushNamed(
-                      context, '/camera',
-                      arguments: ScreenArguments(
-                          firstCamera: firstCamera,
-                          noteId: widget.arguments.noteId,
-                          subNoteId: widget.arguments.subNoteId,
-                          photos: widget.arguments.photos));
-                    break;
                   case 'select':
                     setState(() {
                       _isSelect = !_isSelect;
@@ -123,10 +123,6 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
               },
               itemBuilder: (_) => <PopupMenuItem<String>>[
                 new PopupMenuItem<String>(
-                  value: 'add',
-                  child: Text('Add Picture'),
-                ),
-                new PopupMenuItem<String>(
                   value: 'select',
                   child: Text(_isSelect ? 'Unselect' : 'Select'),
                 ),
@@ -141,6 +137,21 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
           ],
         ),
         body: _picGrid(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final cameras = await availableCameras();
+            final firstCamera = cameras.first;
+            Navigator
+                .pushNamed(
+                context, '/camera',
+                arguments: ScreenArguments(
+                    firstCamera: firstCamera,
+                    noteId: widget.arguments.noteId,
+                    subNoteId: widget.arguments.subNoteId,
+                    photos: widget.arguments.photos));
+          },
+          child: Icon(Icons.photo_camera),
+        ),
       ),
     );
   }
