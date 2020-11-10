@@ -30,10 +30,9 @@ class NoteCubit extends Cubit<NoteState> {
     emit(LoadedNoteState(notes));
   }
 
-  void addSubNotes(NoteModel noteModel, SubNotes subNotes) async {
-    sub.add(subNotes);
+  void addSubNotes(NoteModel noteModel, List<SubNotes> subNotes) async {
     int index = notes.indexWhere((element) => element.id == noteModel.id);
-    notes[index].subNotes = sub;
+    notes[index].subNotes = subNotes;
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }

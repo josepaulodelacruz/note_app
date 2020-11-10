@@ -25,8 +25,9 @@ class NoteModel extends HiveObject {
     this.id,
     this.title,
     this.description,
-    {this.subNotes, this.coverPhoto}
+    {this.subNotes = const [], this.coverPhoto}
   );
+
 
   Map<String, dynamic> toMap () {
     return {
@@ -37,6 +38,7 @@ class NoteModel extends HiveObject {
       'subNotes': this.subNotes,
     };
   }
+
 
   bool checkIfNull () {
     return [id, title, description, coverPhoto, subNotes].contains(null);
