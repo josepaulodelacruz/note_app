@@ -33,7 +33,6 @@ class _BottomModalState extends State<BottomModal>{
   DateTime selectedDate;
   TextEditingController subNotes = TextEditingController();
   TextEditingController subject = TextEditingController();
-  List<SubNotes> _subNotes;
 
   @override
   void initState () {
@@ -43,7 +42,6 @@ class _BottomModalState extends State<BottomModal>{
     index = widget.index;
     editSubNotes = widget.editSubNotes;
     selectedDate = editSubNotes != null ? editSubNotes.isDate : DateTime.now();
-    _subNotes = widget.noteModel.subNotes;
   }
 
 
@@ -175,10 +173,7 @@ class _BottomModalState extends State<BottomModal>{
             if(!isEdit) {
               final generatedId = genId();
               SubNotes _isSubNotes = SubNotes(generatedId, selectedDate, subject.text, subNotes.text, photos: []);
-              setState(() {
-                _subNotes.add(_isSubNotes);
-              });
-              BlocProvider.of<NoteCubit>(context).addSubNotes(noteModel, _subNotes);
+              BlocProvider.of<NoteCubit>(context).addSubNotes(noteModel, _isSubNotes);
               Navigator.pop(context);
             } else {
               SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text, photos: []);

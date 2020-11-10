@@ -64,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen>{
                         children: ListTile.divideTiles(
                           context: context,
                           tiles: state.notes?.map((note) {
-                            return _noteCard(context, note);
+                            int index = state.notes.indexOf(note);
+                            return _noteCard(context, note, index);
                           })?.toList() ?? [],
                         ).toList(),
                       );
@@ -84,19 +85,22 @@ class _HomeScreenState extends State<HomeScreen>{
     );
   }
 
-  Widget _noteCard (BuildContext context, NoteModel note) {
+  Widget _noteCard (BuildContext context, NoteModel note, int index) {
     final _title = note.checkIfNull() ?
         getInitials(title: note.title) : note.coverPhoto;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       width: MediaQuery.of(context).size.width * 0.90,
       child: ListTile(
-        leading: note.coverPhoto == null ?
+        leading: note.subNotes.isEmpty || note.subNotes[0].photos.isEmpty ?
           CircleAvatar(
             radius: 20,
             backgroundColor: Colors.black12,
             child: Text(_title)) :
-          Image.file(File(note.coverPhoto), fit: BoxFit.cover),
+          Hero(
+            tag: note.subNotes[0].photos[0].id,
+            child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
+          ),
         title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
         subtitle: Text(note.description, overflow: TextOverflow.ellipsis),
         trailing: IconButton(
