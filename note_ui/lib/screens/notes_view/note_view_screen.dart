@@ -8,6 +8,7 @@ import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
+import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 import 'package:note_ui/screens/notes_view/widgets/navbar.dart';
@@ -39,13 +40,14 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   DateTime selectedDate = DateTime.now();
   final TextEditingController _newTitle = TextEditingController();
   final TextEditingController _newDescription = TextEditingController();
-  List<Photo> _photos = <Photo>[];
+  SubNotes subNotes;
 
   @override
   void initState () {
     super.initState();
     noteModel = widget.noteModel;
-    _photos = noteModel.subNotes[0].photos;
+    subNotes =
+      noteModel.subNotes.isEmpty ? null : noteModel.subNotes[0];
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is LoadedNoteState) {
         NoteModel a =
@@ -119,24 +121,35 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
               Container(
                 child: Opacity(
                   opacity: 0.8,
-                  child: _photos.isNotEmpty ? CarouselSlider.builder(
-                    itemCount: _photos.length,
+                  child: subNotes != null? CarouselSlider.builder(
+                    itemCount: subNotes.photos.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Stack(
                         children: [
-                          Image.file(
-                            File(_photos[index].imagePath),
-                            fit: BoxFit.cover,
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
+                          Hero(
+                            tag: subNotes.photos[index].id,
+                            child: Image.file(
+                              File(subNotes.photos[index].imagePath),
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                            ),
                           ),
                           Container(
                             child: InkWell(
                               onTap: () {
-                                print('navigate. to gallery');
+                                Navigator
+                                    .pushNamed(
+                                    context, '/gallery',
+                                    arguments: ScreenArguments(
+                                        photos: subNotes.photos,
+                                        index: index,
+                                        noteId: noteModel.id,
+                                        subNoteId: subNotes.id)
+                                );
                               },
                             ),
                             decoration: BoxDecoration(
@@ -253,8 +266,8 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        _photos =
-                          note.photos.isEmpty ? [] : note.photos;
+                        subNotes =
+                          note.photos.isEmpty ? null : note;
                       });
                     },
                     child: Card(
