@@ -47,9 +47,11 @@ class MyApp extends StatelessWidget {
         title: 'Notes Application',
         theme: ThemeData(
           brightness: Brightness.dark,
-          floatingActionButtonTheme: FloatingActionButtonThemeData(),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Color(0xFF777777)
+          ),
           buttonColor: Colors.lightBlueAccent,
-          scaffoldBackgroundColor: Colors.black54,
+          scaffoldBackgroundColor: Color(0xFF111111),
           textTheme: TextTheme(
             caption: TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
           ),

@@ -10,9 +10,12 @@ import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/model/screen_argument.dart';
+import 'package:note_ui/screens/notes_view/widgets/album_slider.dart';
 import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 import 'package:note_ui/screens/notes_view/widgets/navbar.dart';
 import 'package:note_ui/screens/notes_view/widgets/note_card.dart';
+import 'package:note_ui/screens/notes_view/widgets/upper_header.dart';
+import 'package:note_ui/screens/notes_view/widgets/upper_subtitle.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
 import 'package:note_ui/widgets/confirmation_modal.dart';
 
@@ -50,12 +53,16 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
       noteModel.subNotes.isEmpty ? null : noteModel.subNotes[0];
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is LoadedNoteState) {
+        int index = state.notes.indexWhere((note) => note.id == noteModel.id);
+        print(index);
         NoteModel a =
           state.notes.firstWhere((note) => note.id == noteModel.id, orElse: () => null);
         if(mounted) {
           setState(() {
             noteModel = a != null ?
               a : widget.noteModel;
+            subNotes =
+              noteModel.subNotes.isEmpty ? null : noteModel.subNotes[0];
           });
         }
       }
@@ -79,16 +86,16 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
           newDescription: _newDescription,
           renderBottomModal: () {
             return showModalBottomSheet(
-                context: context,
-                builder: (_) => SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: BottomModal(
-                        noteModel: noteModel,
-                        selectedDate: selectedDate,
-                      ),
-                    )
+              context: context,
+              builder: (_) => SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: BottomModal(
+                    noteModel: noteModel,
+                    selectedDate: selectedDate,
+                  ),
                 )
+              )
             );
           },
         ),
@@ -98,262 +105,20 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _upperHeader(),
-              _upperSubtitle(),
-              _albumSlider(),
+              UpperHeader(noteModel: noteModel, subNotes: subNotes),
+              UpperSubtitle(noteModel: noteModel),
+              AlbumSlider(
+                noteModel: noteModel,
+                isSetState: (note) {
+                setState(() {
+                  subNotes =
+                  note.photos.isEmpty ? null : note;
+                });
+              }),
             ],
           ),
         )
       )
-    );
-  }
-
-
-  Widget _upperHeader () {
-    return Container(
-      height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.50,
-        child: Stack(
-          children: [
-            if(noteModel.coverPhoto != null ) ...[
-              Container(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: subNotes != null? CarouselSlider.builder(
-                    itemCount: subNotes.photos.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Stack(
-                        children: [
-                          Hero(
-                            tag: subNotes.photos[index].id,
-                            child: Image.file(
-                              File(subNotes.photos[index].imagePath),
-                              fit: BoxFit.cover,
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                            ),
-                          ),
-                          Container(
-                            child: InkWell(
-                              onTap: () {
-                                Navigator
-                                    .pushNamed(
-                                    context, '/gallery',
-                                    arguments: ScreenArguments(
-                                        photos: subNotes.photos,
-                                        index: index,
-                                        noteId: noteModel.id,
-                                        subNoteId: subNotes.id)
-                                );
-                              },
-                            ),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  const Color(0xCC000000),
-                                  const Color(0x00000000),
-                                  const Color(0x00000000),
-                                  Colors.black87,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                    options: CarouselOptions(
-                        enableInfiniteScroll: false,
-                        reverse: false,
-                        initialPage: 0,
-                        height: MediaQuery.of(context).size.height,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: false
-                    ),
-                  ) : SizedBox(),
-                ),
-              ),
-            ],
-            Padding(
-              padding: const EdgeInsets.only(left: 32.0),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  noteModel.title,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline3,
-                ),
-              ),
-            )
-          ],
-        )
-    );
-  }
-
-  Widget _upperSubtitle () {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-          child: Row(
-            children: [
-              Icon(Icons.photo_album_sharp),
-              Spacer(),
-              IconButton(
-                onPressed: () {
-                },
-                icon: Icon(Icons.add_comment),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 32),
-          child: Divider(thickness: 2),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-          child: Text(
-              noteModel.description.toUpperCase(),
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.caption
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _albumSlider () {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text('Collections', style: Theme.of(context).textTheme.subtitle1),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 32),
-            child: Divider(thickness: 2),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.15,
-            padding: EdgeInsets.only(left: 32),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              physics: ClampingScrollPhysics(),
-              children: noteModel.subNotes?.map((note) {
-                int index = noteModel.subNotes.indexOf(note);
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey[500],
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 5),
-                  height: MediaQuery.of(context).size.height * 0.10,
-                  width: MediaQuery.of(context).size.width * 0.30,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        subNotes =
-                          note.photos.isEmpty ? null : note;
-                      });
-                    },
-                    child: Card(
-                      child: Stack(
-                        children: [
-                          if(note.photos.length > 0) ...[
-                            Align(
-                              alignment: Alignment.center,
-                              child: Image.file(File(note.photos[0].imagePath), fit: BoxFit.cover, width: 150),
-                            ),
-                          ],
-                          Align(
-                            alignment: Alignment.center,
-                            child: PopupMenuButton(
-                              icon: Icon(Icons.add_box),
-                              onSelected: (value) {
-                                switch(value) {
-                                  case 'view':
-                                    Navigator
-                                      .pushNamed(
-                                      context, '/gallery',
-                                      arguments: ScreenArguments(
-                                        photos: note.photos,
-                                        index: index,
-                                        noteId: noteModel.id,
-                                        subNoteId: note.id)
-                                      );
-                                    break;
-                                  case 'edit':
-                                    return showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      builder: (_) => SingleChildScrollView(
-                                        child: Container(
-                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                          child: BottomModal(
-                                            isEdit: true,
-                                            editSubNotes: note,
-                                            noteModel: noteModel,
-                                            selectedDate: noteModel.subNotes[index].isDate,
-                                            index: index,
-                                          ),
-                                        ),
-                                      )
-                                    );
-                                    break;
-                                  case 'delete':
-                                    context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
-                                    break;
-                                }
-                              },
-                              itemBuilder: (_) => <PopupMenuItem<String>>[
-                                new PopupMenuItem<String>(
-                                  value: 'view',
-                                  child: Text('Gallery'),
-                                ),
-                                new PopupMenuItem<String>(
-                                  value: 'edit',
-                                  child: Text('Edit'),
-                                ),
-                                new PopupMenuItem<String>(
-                                  value: 'delete',
-                                  child: Text('Delete'),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text('${note.isDate.month}/${note.isDate.day}/${note.isDate.year}', style: Theme.of(context).textTheme.caption)
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text('${note.title}', style: Theme.of(context).textTheme.caption)
-                          )
-                        ],
-                      )
-                    ),
-                  ),
-                );
-              })?.toList() ?? []
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
