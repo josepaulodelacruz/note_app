@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hardware_buttons/hardware_buttons.dart' as HardwareButtons;
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/screens/take_photo/widgets/image_card.dart';
@@ -28,8 +27,8 @@ class TakePhotoScreen extends StatefulWidget {
 class _TakePhotoScreen extends State<TakePhotoScreen> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
-  StreamSubscription<HardwareButtons.VolumeButtonEvent> _volumeButtonSubscription;
   var _imagePath;
+  bool _isCamera = false;
 
   @override
   void initState () {
@@ -42,6 +41,13 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
     _imagePath = widget.args.photos.isEmpty ?
         ""  : widget.args.photos[0].imagePath
         ?? "";
+
+    Future.delayed(Duration(milliseconds: 600), () {
+      setState(() {
+        _isCamera = true;
+      });
+
+    });
   }
 
   @override
@@ -117,7 +123,11 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
                 children: [
                   Flexible(
                     flex: 6,
-                    child: CameraPreview(_controller),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.grey,
+                      child: _isCamera ? CameraPreview(_controller) : SizedBox(),
+                    ),
                   ),
                   Flexible(
                     flex: 1,

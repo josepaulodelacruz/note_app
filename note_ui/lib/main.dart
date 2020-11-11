@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: Color(0xFF777777)
+            backgroundColor: Color(0xFF777777),
           ),
           buttonColor: Colors.lightBlueAccent,
           scaffoldBackgroundColor: Color(0xFF111111),
