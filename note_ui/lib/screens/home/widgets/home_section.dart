@@ -1,44 +1,42 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_common/bloc/note/note_cubit.dart';
-import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_ui/utils/get_initials.dart';
 
 class HomeSection extends StatelessWidget {
+  List<NoteModel> notes;
+
+  HomeSection({this.notes});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
           color: Color(0xFF111111),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: BlocBuilder<NoteCubit, NoteState>(
-            builder: (context, state) {
-              if(state is LoadingNoteState) {
-                return Center(child: CircularProgressIndicator());
-              } else if(state is LoadedNoteState) {
-                return ListView(
-                  children: ListTile.divideTiles(
-                    context: context,
-                    tiles: state.notes?.map((note) {
-                      int index = state.notes.indexOf(note);
-                        return _noteCard(context, note, index);
-                    })?.toList() ?? [],
-                  ).toList(),
-                );
-              } else {
-                return SizedBox();
-              }
-            },
-          )
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
+          child: ListView(
+            children: ListTile.divideTiles(
+              context: context,
+              tiles: notes?.map((note) {
+                int index = notes.indexOf(note);
+                return _noteCard(context, note, index);
+              })?.toList() ?? [],
+            ).toList(),
+          ),
         ),
       ],
     );
   }
+
 
   Widget _noteCard (BuildContext context, NoteModel note, int index) {
     final _title = note.checkIfNull() ?

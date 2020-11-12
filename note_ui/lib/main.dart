@@ -23,8 +23,7 @@ void main () async {
   Bloc.observer = NoteObserver();
   Bloc.observer = ThemeObserver();
   var dir = await getApplicationDocumentsDirectory();
-  Hive.initFlutter(dir.path);
-  Hive.registerAdapter(ThemeAdapter());
+  await Hive.initFlutter(dir.path);
   Hive.registerAdapter(NoteModelAdapter());
   Hive.registerAdapter(SubNotesAdapter());
   Hive.registerAdapter(PhotoAdapter());

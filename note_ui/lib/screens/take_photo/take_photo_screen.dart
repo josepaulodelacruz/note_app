@@ -28,6 +28,7 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   var _imagePath;
+  double _scale = 1.0;
   bool _isCamera = false;
   bool _trigger = false;
 
@@ -133,6 +134,12 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
               onDoubleTap: () async {
                 _takePhoto();
               },
+              onScaleUpdate: (one) {
+                print(one.scale);
+                setState(() {
+                  _scale = one.scale;
+                });
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -143,7 +150,13 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
                       color: Colors.grey,
                       child: _isCamera ? Stack(
                         children: [
-                          CameraPreview(_controller),
+                          Transform.scale(
+                            scale: _scale,
+                            child: AspectRatio(
+                              aspectRatio: _controller.value.aspectRatio,
+                              child: CameraPreview(_controller)
+                            )
+                          ),
                           AnimatedOpacity(
                             duration: Duration(milliseconds: 50),
                             opacity: _trigger ? 0.5 : 0,

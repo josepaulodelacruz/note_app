@@ -35,7 +35,6 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
       noteModel.subNotes.isEmpty ? null : noteModel.subNotes[0];
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is LoadedNoteState) {
-        int index = state.notes.indexWhere((note) => note.id == noteModel.id);
         NoteModel a =
           state.notes.firstWhere((note) => note.id == noteModel.id, orElse: () => null);
         if(mounted) {
