@@ -43,25 +43,6 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
     });
   }
 
-  void _unSelectAll () {
-    if(!_isSelect) {
-      _unSelectItem();
-      setState(() {
-        _isSelected = 0;
-      });
-    }
-  }
-
-  void _unSelectItem () {
-    _photos.map((e) {
-      int index = _photos.indexOf(e);
-      setState(() {
-        _photos[index].isSeleted = false;
-      });
-    }).toList();
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -96,26 +77,7 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                     _unSelectAll();
                     break;
                   case 'delete':
-                    showDialog(
-                      context: context,
-                      builder: (_) => ConfirmationModal(
-                        titleType: 'Photos',
-                        handle: () {
-                          setState(() {
-                            _photos.removeWhere((p) => p.isSeleted == true);
-                            _isSelected = 0;
-                            _isSelect = false;
-                          });
-                          BlocProvider.of<NoteCubit>(context).deleteImage(
-                              _photos,
-                              widget.arguments.noteId,
-                              widget.arguments.subNoteId
-                          );
-                          Navigator.pop(context);
-
-                        },
-                      ),
-                    );
+                    _onDelete();
                     break;
                   default:
                     break;
@@ -126,12 +88,6 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                   value: 'select',
                   child: Text(_isSelect ? 'Unselect' : 'Select'),
                 ),
-                if(_isSelect) ...[
-                  PopupMenuItem<String>(
-                    value: 'delete',
-                    child: Text('Delete'),
-                  ),
-                ]
               ],
             ),
           ],
@@ -139,18 +95,23 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
         body: _picGrid(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            final cameras = await availableCameras();
-            final firstCamera = cameras.first;
-            Navigator
-                .pushNamed(
-                context, '/camera',
-                arguments: ScreenArguments(
-                    firstCamera: firstCamera,
-                    noteId: widget.arguments.noteId,
-                    subNoteId: widget.arguments.subNoteId,
-                    photos: widget.arguments.photos));
+            if(!_isSelect) {
+              final cameras = await availableCameras();
+              final firstCamera = cameras.first;
+              Navigator
+                  .pushNamed(
+                  context, '/camera',
+                  arguments: ScreenArguments(
+                      firstCamera: firstCamera,
+                      noteId: widget.arguments.noteId,
+                      subNoteId: widget.arguments.subNoteId,
+                      photos: widget.arguments.photos));
+            } else {
+              _onDelete();
+            }
+
           },
-          child: Icon(Icons.photo_camera),
+          child: Icon(_isSelect ? Icons.delete : Icons.photo_camera),
         ),
       ),
     );
@@ -200,6 +161,48 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
       onNoReorder: (int index) {
         debugPrint('${DateTime.now().toString().substring(5, 22)} reorder cancelled. index:$index');
       },
+    );
+  }
+
+
+  void _unSelectAll () {
+    if(!_isSelect) {
+      _unSelectItem();
+      setState(() {
+        _isSelected = 0;
+      });
+    }
+  }
+
+  void _unSelectItem () {
+    _photos.map((e) {
+      int index = _photos.indexOf(e);
+      setState(() {
+        _photos[index].isSeleted = false;
+      });
+    }).toList();
+  }
+
+  void _onDelete () async {
+    await showDialog(
+      context: context,
+      builder: (_) => ConfirmationModal(
+        titleType: 'Photos',
+        handle: () {
+          setState(() {
+            _photos.removeWhere((p) => p.isSeleted == true);
+            _isSelected = 0;
+            _isSelect = false;
+          });
+          BlocProvider.of<NoteCubit>(context).deleteImage(
+              _photos,
+              widget.arguments.noteId,
+              widget.arguments.subNoteId
+          );
+          Navigator.pop(context);
+
+        },
+      ),
     );
   }
 
