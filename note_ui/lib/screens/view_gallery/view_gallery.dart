@@ -40,7 +40,7 @@ class _ViewGalleryState extends State<ViewGallery>{
           carouselController: photoSlider,
           options: CarouselOptions(
             enableInfiniteScroll: false,
-            height: height / 1.5,
+            height: height,
             viewportFraction: 1.0,
             enlargeCenterPage: false,
             initialPage: arguments.index,

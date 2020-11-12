@@ -6,8 +6,10 @@ import 'package:note_ui/utils/appbar_shape.dart';
 
 class NavBar extends StatelessWidget {
   final state;
+  final AnimatedIcon animatedIcon;
+  final Function event;
 
-  const NavBar({Key key, this.state});
+  const NavBar({Key key, this.state, this.animatedIcon, this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +17,15 @@ class NavBar extends StatelessWidget {
       shape: appBarShape(0),
       title: Text('Home'),
       actions: [
+        Padding(
+          padding: EdgeInsets.only(right: 20),
+          child: GestureDetector(
+            onTap: () => event(),
+            child: Center(
+              child: animatedIcon,
+            ),
+          ),
+        )
       ],
     );
   }
