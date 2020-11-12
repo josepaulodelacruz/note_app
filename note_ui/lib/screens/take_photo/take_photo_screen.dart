@@ -29,6 +29,7 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
   Future<void> _initializeControllerFuture;
   var _imagePath;
   bool _isCamera = false;
+  bool _trigger = false;
 
   @override
   void initState () {
@@ -71,9 +72,23 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
           _imagePath = path;
         });
       });
+      _cameraShutter();
     } catch (e) {
       print(e);
     }
+  }
+
+  bool _cameraShutter () {
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {
+        _trigger = true;
+      });
+    });
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+        _trigger = false;
+      });
+    });
   }
 
   Future<void> _cardDialogImage (path) async {
@@ -126,7 +141,19 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height,
                       color: Colors.grey,
-                      child: _isCamera ? CameraPreview(_controller) : SizedBox(),
+                      child: _isCamera ? Stack(
+                        children: [
+                          CameraPreview(_controller),
+                          AnimatedOpacity(
+                            duration: Duration(milliseconds: 50),
+                            opacity: _trigger ? 0.5 : 0,
+                            child: Container(
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      )
+                          : SizedBox(),
                     ),
                   ),
                   Flexible(

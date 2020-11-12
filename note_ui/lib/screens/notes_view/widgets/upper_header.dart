@@ -20,11 +20,11 @@ class UpperHeader extends StatelessWidget {
           .height * 0.50,
       child: Stack(
         children: [
-          if(noteModel.coverPhoto != null ) ...[
+          if(noteModel != null ) ...[
             Container(
               child: Opacity(
                 opacity: 0.8,
-                child: subNotes != null? CarouselSlider.builder(
+                child: subNotes != null ? CarouselSlider.builder(
                   itemCount: subNotes.photos.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Stack(
