@@ -37,6 +37,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> with
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         shape: appBarShape(20),
         title: Text('Add Notes'),

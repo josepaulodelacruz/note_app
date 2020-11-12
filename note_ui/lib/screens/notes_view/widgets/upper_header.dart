@@ -45,13 +45,13 @@ class UpperHeader extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               Navigator
-                                  .pushNamed(
-                                  context, '/gallery',
-                                  arguments: ScreenArguments(
-                                      photos: subNotes.photos,
-                                      index: index,
-                                      noteId: noteModel.id,
-                                      subNoteId: subNotes.id)
+                                .pushNamed(
+                                context, '/gallery',
+                                arguments: ScreenArguments(
+                                    photos: subNotes.photos,
+                                    index: index,
+                                    noteId: noteModel.id,
+                                    subNoteId: subNotes.id)
                               );
                             },
                           ),
@@ -63,7 +63,7 @@ class UpperHeader extends StatelessWidget {
                                 const Color(0xCC000000),
                                 const Color(0x00000000),
                                 const Color(0x00000000),
-                                Colors.black87,
+                                Colors.black54
                               ],
                             ),
                           ),

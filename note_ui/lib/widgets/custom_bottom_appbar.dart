@@ -7,8 +7,9 @@ import 'package:note_ui/screens/notes_view/widgets/note_card.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
   final state;
+  Function isSetState;
 
-  CustomBottomAppBar({this.state});
+  CustomBottomAppBar({this.state, this.isSetState});
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +19,13 @@ class CustomBottomAppBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(icon: Icon(Icons.search), onPressed: () {
-              BlocProvider.of<NoteCubit>(context).test();
+            IconButton(icon: Icon(Icons.home), onPressed: () {
+              isSetState(0);
+//              BlocProvider.of<NoteCubit>(context).test();
             }),
-            IconButton(icon: Icon(Icons.wb_sunny_outlined), onPressed: () {
-              BlocProvider.of<ThemeCubit>(context).changeTheme(state.enableTheme);
+            IconButton(icon: Icon(Icons.search), onPressed: () {
+              isSetState(1);
+//              BlocProvider.of<ThemeCubit>(context).changeTheme(state.enableTheme);
             }),
           ],
         )
