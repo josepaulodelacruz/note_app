@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:note_ui/utils/appbar_shape.dart';
 
 class NavBar extends StatelessWidget {
   final AnimatedIcon animatedIcon;
@@ -10,7 +9,6 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      shape: appBarShape(0),
       title: Text('Home'),
       actions: [
         Padding(

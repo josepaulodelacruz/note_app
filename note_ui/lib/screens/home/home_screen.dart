@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
@@ -101,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen>
             notes: searchNotes,
             input: _searchInput,
             clearText: () {
+              node.unfocus();
               setState(() {
                 _searchInput.text = '';
                 searchNotes = [];

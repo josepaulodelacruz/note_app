@@ -62,17 +62,17 @@ class _AddNoteScreenState extends State<AddNoteScreen> with
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if(_formKey.currentState.validate()) {
-            context.bloc<NoteCubit>().addNote(_title.text, _description.text);
-            Navigator.of(context).pop();
-          }
-        },
+        onPressed: () => _handleSubmit(),
         child: Icon(Icons.check),
       ),
-      bottomNavigationBar: CustomBottomAppBar(),
     );
+  }
+  
+  void _handleSubmit () {
+    if(_formKey.currentState.validate()) {
+      context.bloc<NoteCubit>().addNote(_title.text, _description.text);
+      Navigator.of(context).pop();
+    }
   }
 }

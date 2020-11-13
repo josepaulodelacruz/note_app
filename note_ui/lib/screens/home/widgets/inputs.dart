@@ -8,6 +8,7 @@ class InputCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -17,6 +18,7 @@ class InputCard extends StatelessWidget {
           child: Card(
             child: TextFormField(
               controller: controller,
+              onEditingComplete: () => node.nextFocus(),
               onChanged: (value) {
               },
               validator: (value) {
