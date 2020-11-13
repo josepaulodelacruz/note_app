@@ -79,7 +79,18 @@ class UpperHeader extends StatelessWidget {
                       viewportFraction: 1.0,
                       enlargeCenterPage: false
                   ),
-                ) : SizedBox(),
+                ) : Hero(
+                  tag: noteModel.id,
+                  child: Container(
+                    color: Color(0xFF333333),
+                    child: Center(
+                      child: Material(
+                        color: Color(0xFF333333),
+                        child: Text('HE', style: Theme.of(context).textTheme.headline1)
+                      ),
+                    )
+                  ),
+                ),
               ),
             ),
           ],

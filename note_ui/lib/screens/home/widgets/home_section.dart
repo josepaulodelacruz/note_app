@@ -37,10 +37,13 @@ class HomeSection extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.90,
         child: ListTile(
           leading: note.subNotes.isEmpty || note.subNotes[0].photos.isEmpty ?
-          CircleAvatar(
+          Hero(
+            tag: note.id,
+            child: CircleAvatar(
+              backgroundColor: Color(0xFF333333),
               radius: 20,
-              backgroundColor: Colors.black12,
-              child: Text(_title)) :
+              child: Material(child: Text(_title))),
+          ) :
           Hero(
               tag: note.subNotes[0].photos[0].id,
               child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
@@ -110,13 +113,14 @@ class HomeSection extends StatelessWidget {
                     coverPhoto: note.coverPhoto));
             },
             child: note.subNotes.isEmpty || note.subNotes[0].photos.isEmpty ?
-            CircleAvatar(
-                radius: 20,
-                backgroundColor: Color(0xFF333333),
-                child: Text(_title)) :
             Hero(
-                tag: note.subNotes[0].photos[0].id,
-                child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
+              tag: note.id,
+              child: Center(
+                child: Material(child: Text(_title))),
+            ) :
+            Hero(
+              tag: note.subNotes[0].photos[0].id,
+              child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
             ),
           ),
         )
