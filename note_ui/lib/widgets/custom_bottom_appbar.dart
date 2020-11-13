@@ -1,9 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_common/bloc/note/note_cubit.dart';
-import 'package:note_common/bloc/theme/theme_cubit.dart';
-import 'package:note_ui/screens/notes_view/widgets/note_card.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
   final state;
@@ -21,11 +17,9 @@ class CustomBottomAppBar extends StatelessWidget {
           children: [
             IconButton(icon: Icon(Icons.home), onPressed: () {
               isSetState(0);
-//              BlocProvider.of<NoteCubit>(context).test();
             }),
             IconButton(icon: Icon(Icons.search), onPressed: () {
               isSetState(1);
-//              BlocProvider.of<ThemeCubit>(context).changeTheme(state.enableTheme);
             }),
           ],
         )

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_common/bloc/note/note_cubit.dart';
-import 'package:note_common/bloc/theme/theme_cubit.dart';
 import 'package:note_ui/utils/appbar_shape.dart';
 
 class NavBar extends StatelessWidget {
-  final state;
   final AnimatedIcon animatedIcon;
   final Function event;
 
-  const NavBar({Key key, this.state, this.animatedIcon, this.event});
+  const NavBar({Key key, this.animatedIcon, this.event});
 
   @override
   Widget build(BuildContext context) {
