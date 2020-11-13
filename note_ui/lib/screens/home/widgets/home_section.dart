@@ -85,7 +85,7 @@ class HomeSection extends StatelessWidget {
       getInitials(title: note.title) : note.coverPhoto;
       return GridTile(
         footer: Material(
-          color: Colors.black45,
+          color: Colors.transparent,
           shape: const RoundedRectangleBorder(
           ),
           clipBehavior: Clip.antiAlias,
@@ -95,26 +95,29 @@ class HomeSection extends StatelessWidget {
             subtitle: Text(note.description, overflow: TextOverflow.ellipsis),
           ),
         ),
-        child: InkWell(
-          onTap: () {
-            Navigator
-              .pushNamed(
-              context, '/view',
-              arguments: NoteModel(
-                  note.id,
-                  note.title,
-                  note.description,
-                  subNotes: note.subNotes,
-                  coverPhoto: note.coverPhoto));
-          },
-          child: note.subNotes.isEmpty || note.subNotes[0].photos.isEmpty ?
-          CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.black12,
-              child: Text(_title)) :
-          Hero(
-              tag: note.subNotes[0].photos[0].id,
-              child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
+        child: Container(
+          color: Color(0xFF333333),
+          child: InkWell(
+            onTap: () {
+              Navigator
+                .pushNamed(
+                context, '/view',
+                arguments: NoteModel(
+                    note.id,
+                    note.title,
+                    note.description,
+                    subNotes: note.subNotes,
+                    coverPhoto: note.coverPhoto));
+            },
+            child: note.subNotes.isEmpty || note.subNotes[0].photos.isEmpty ?
+            CircleAvatar(
+                radius: 20,
+                backgroundColor: Color(0xFF333333),
+                child: Text(_title)) :
+            Hero(
+                tag: note.subNotes[0].photos[0].id,
+                child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
+            ),
           ),
         )
       );
