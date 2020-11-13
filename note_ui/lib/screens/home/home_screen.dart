@@ -29,9 +29,24 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState () {
     super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _myAnimation = CurvedAnimation(
+      curve: Curves.linear,
+      parent: _controller,
+    );
     BlocProvider.of<NoteCubit>(context).onLoading();
+    BlocProvider.of<NoteCubit>(context).onloadGridView();
     BlocProvider.of<NoteCubit>(context).listen((state) {
-      if(state is LoadedNoteState) {
+      if(state is IsView) {
+        setState(() {
+          isView = state.isView;
+        });
+        isView ? _controller.reverse() : _controller.forward();
+
+      } else if(state is LoadedNoteState) {
         if(mounted) {
           setState(() {
             noteModels = state.notes;
@@ -39,15 +54,6 @@ class _HomeScreenState extends State<HomeScreen>
         }
       }
     });
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-    );
-    _controller.forward();
-    _myAnimation = CurvedAnimation(
-      curve: Curves.linear,
-      parent: _controller,
-    );
   }
 
   @override
@@ -63,8 +69,7 @@ class _HomeScreenState extends State<HomeScreen>
             setState(() {
               isView = !isView;
             });
-            isView ?
-                _controller.reverse() : _controller.forward();
+            BlocProvider.of<NoteCubit>(context).listGridView(isView);
           },
           animatedIcon: AnimatedIcon(
             icon: AnimatedIcons.list_view,

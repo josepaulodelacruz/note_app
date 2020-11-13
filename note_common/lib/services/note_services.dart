@@ -8,5 +8,9 @@ abstract class NoteService {
 
   Future<List<NoteModel>> updateNote (List<NoteModel> noteModel);
 
+  Future<bool> onloadListGrid ();
+
+  Future viewListGrid (bool isView);
+
   void deleteAll ();
 }

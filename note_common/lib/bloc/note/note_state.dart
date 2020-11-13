@@ -38,3 +38,10 @@ class DeletedNote extends NoteState {
   List<Object> get props => [message];
 }
 
+class IsView extends NoteState {
+  bool isView;
+
+  IsView(this.isView);
+
+  List<Object> get props => [isView];
+}

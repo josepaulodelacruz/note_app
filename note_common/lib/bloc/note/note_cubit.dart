@@ -22,6 +22,16 @@ class NoteCubit extends Cubit<NoteState> {
     emit(LoadedNoteState(notes));
   }
 
+  void onloadGridView () async {
+    bool isView = await noteApi.onloadListGrid();
+    emit(IsView(isView));
+  }
+
+  void listGridView (bool isView) async {
+    await noteApi.viewListGrid(isView);
+    emit(IsView(isView));
+  }
+
   void addNote(String title, String description) async {
     var uuid = Uuid();
     final note = NoteModel(uuid.v4(), title, description);
