@@ -10,8 +10,9 @@ import 'package:note_ui/widgets/bottom_modal.dart';
 class AlbumSlider extends StatelessWidget {
   NoteModel noteModel;
   Function isSetState;
+  final Function renderBottomModal;
 
-  AlbumSlider({this.noteModel, this.isSetState});
+  AlbumSlider({this.noteModel, this.isSetState, this.renderBottomModal});
 
 
   @override
@@ -22,9 +23,23 @@ class AlbumSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Collections', style: Theme.of(context).textTheme.subtitle1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text('Collections', style: Theme.of(context).textTheme.subtitle1),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 32.0),
+                child: GestureDetector(
+                  onTap: () {
+                    renderBottomModal();
+                  },
+                  child: Icon(Icons.add_a_photo)
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),

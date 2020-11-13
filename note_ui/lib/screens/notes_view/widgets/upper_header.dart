@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/model/screen_argument.dart';
+import 'package:note_ui/utils/get_initials.dart';
 
 class UpperHeader extends StatelessWidget {
   NoteModel noteModel;
@@ -13,6 +14,8 @@ class UpperHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _title = noteModel.checkIfNull() ?
+    getInitials(title: noteModel.title) : noteModel.coverPhoto;
     return Container(
       height: MediaQuery
           .of(context)
@@ -24,7 +27,7 @@ class UpperHeader extends StatelessWidget {
             Container(
               child: Opacity(
                 opacity: 0.8,
-                child: subNotes != null ? CarouselSlider.builder(
+                child: subNotes != null && subNotes.photos.length > 0 ? CarouselSlider.builder(
                   itemCount: subNotes.photos.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Stack(
@@ -86,7 +89,7 @@ class UpperHeader extends StatelessWidget {
                     child: Center(
                       child: Material(
                         color: Color(0xFF333333),
-                        child: Text('HE', style: Theme.of(context).textTheme.headline1)
+                        child: Text(_title, style: Theme.of(context).textTheme.headline1)
                       ),
                     )
                   ),

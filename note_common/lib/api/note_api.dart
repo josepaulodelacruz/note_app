@@ -26,7 +26,7 @@ class NoteApi extends NoteService {
   @override
   Future<bool> onloadListGrid () async {
     return await storageApi.openStorageBox('grid-list').then((box) {
-      return box.get('grid-list');
+      return box.get('grid-list', defaultValue: false);
     });
   }
 

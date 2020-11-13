@@ -116,7 +116,7 @@ class HomeSection extends StatelessWidget {
             Hero(
               tag: note.id,
               child: Center(
-                child: Material(child: Text(_title))),
+                child: Material(child: Text(_title, style: Theme.of(context).textTheme.headline6))),
             ) :
             Hero(
               tag: note.subNotes[0].photos[0].id,

@@ -51,14 +51,6 @@ class NavBar extends StatelessWidget {
           },
           itemBuilder: (_) => <PopupMenuItem<String>>[
             new PopupMenuItem<String>(
-              value: 'add',
-              child: Text('Add Notes'),
-            ),
-            new PopupMenuItem<String>(
-              value: 'edit',
-              child: Text('Edit Notes'),
-            ),
-            new PopupMenuItem<String>(
               value: 'delete',
               child: Text('Delete Notes'),
             ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
@@ -64,20 +63,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
           noteModel: noteModel,
           newTitle: _newTitle,
           newDescription: _newDescription,
-          renderBottomModal: () {
-            return showModalBottomSheet(
-              context: context,
-              builder: (_) => SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: BottomModal(
-                    noteModel: noteModel,
-                    selectedDate: selectedDate,
-                  ),
-                )
-              )
-            );
-          },
+
         ),
       ),
       body: Container(
@@ -85,10 +71,29 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         child: SingleChildScrollView(
           child: Column(
             children: [
-              UpperHeader(noteModel: noteModel, subNotes: subNotes),
-              UpperSubtitle(noteModel: noteModel),
+              UpperHeader(
+                noteModel: noteModel,
+                subNotes: subNotes),
+              UpperSubtitle(
+                noteModel: noteModel,
+                newTitle: _newTitle,
+                newDescription:  _newDescription),
               AlbumSlider(
                 noteModel: noteModel,
+                renderBottomModal: () {
+                  return showModalBottomSheet(
+                    context: context,
+                    builder: (_) => SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: BottomModal(
+                          noteModel: noteModel,
+                          selectedDate: selectedDate,
+                        ),
+                      )
+                    )
+                  );
+                },
                 isSetState: (note) {
                 setState(() {
                   subNotes =

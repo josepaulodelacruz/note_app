@@ -50,6 +50,7 @@ class SearchSection extends StatelessWidget {
                 padding: EdgeInsets.only(top: 20),
                 width: MediaQuery.of(context).size.width,
                 child: ListView(
+                  physics: BouncingScrollPhysics(),
                   children: ListTile.divideTiles(
                     context: context,
                     tiles: notes?.map((note) {

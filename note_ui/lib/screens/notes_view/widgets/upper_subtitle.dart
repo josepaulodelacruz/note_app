@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 
 class UpperSubtitle extends StatelessWidget {
   NoteModel noteModel;
+  final TextEditingController newTitle;
+  final TextEditingController newDescription;
 
-  UpperSubtitle({this.noteModel});
+  UpperSubtitle({this.noteModel, this.newDescription, this.newTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +21,16 @@ class UpperSubtitle extends StatelessWidget {
               Spacer(),
               IconButton(
                 onPressed: () {
+                  return showDialog(
+                    context: context,
+                    builder: (_) => EditModal(
+                      noteModel: noteModel,
+                      newTitle: newTitle,
+                      newDescription: newDescription,
+                    ),
+                  );
                 },
-                icon: Icon(Icons.add_comment),
+                icon: Icon(Icons.edit),
               )
             ],
           ),
