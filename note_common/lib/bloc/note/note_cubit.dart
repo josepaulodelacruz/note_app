@@ -104,7 +104,6 @@ class NoteCubit extends Cubit<NoteState> {
         : notes[noteIndex].coverPhoto;
 
     notes[noteIndex].subNotes[subIndex].photos.add(picture);
-    print('cubit: ${notes[noteIndex].coverPhoto}');
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }

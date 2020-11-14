@@ -24,6 +24,7 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   NoteModel noteModel;
   int _isSelected = 0;
   bool _isSelect = false;
+  bool _isArrange = false;
   List<Photo> _photos = List<Photo>();
 
   @override
@@ -151,14 +152,32 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
             child: Card(
               child: Opacity(
                 opacity: pic.isSeleted == true ? 0.3 : 1,
-                child: Image.file(File(pic.imagePath), fit: BoxFit.cover, height: height, width: width),
+                child: Stack(
+                  children: [
+                    Image.file(File(pic.imagePath), fit: BoxFit.cover, height: height, width: width),
+                    if(_isArrange) ...[
+                      Chip(label: Text('${index + 1}')),
+                    ],
+                    if(pic.isSeleted == true) ...[
+                      Icon(Icons.check_circle),
+                    ]
+                  ],
+                ),
               ),
             ),
           ),
         );
       }).toList(),
       onReorder: _onReorder,
+      onReorderStarted: (int index) {
+        setState(() {
+          _isArrange = true;
+        });
+      },
       onNoReorder: (int index) {
+        setState(() {
+          _isArrange = false;
+        });
         debugPrint('${DateTime.now().toString().substring(5, 22)} reorder cancelled. index:$index');
       },
     );
@@ -208,6 +227,7 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
+      _isArrange = false;
       _photos.insert(newIndex, _photos.removeAt(oldIndex));
     });
     context.bloc<NoteCubit>().arrangeImage(
