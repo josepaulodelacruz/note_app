@@ -64,10 +64,12 @@ class NoteCubit extends Cubit<NoteState> {
   }
 
   void editNote(NoteModel noteModel) async {
-    final updated = notes.map((note) {
-      return note.id == noteModel.id ? noteModel : note;
-    }).toList();
-    notes = updated;
+    var rnd = Random();
+    int index = notes.indexWhere((note) => note.id == noteModel.id);
+    notes[index].title = noteModel.title;
+    notes[index].description = noteModel.description == ""
+        ? quotes[rnd.nextInt(quotes.length)].quotes
+        : noteModel.description;
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }

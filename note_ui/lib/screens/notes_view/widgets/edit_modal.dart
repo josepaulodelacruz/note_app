@@ -4,9 +4,9 @@ import 'package:note_common/models/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditModal extends StatelessWidget {
-  final NoteModel noteModel;
-  final TextEditingController newTitle;
-  final TextEditingController newDescription;
+  NoteModel noteModel;
+  TextEditingController newTitle;
+  TextEditingController newDescription;
 
   EditModal({
     this.noteModel,
@@ -16,13 +16,14 @@ class EditModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    newTitle.text = noteModel.title;
     return AlertDialog(
       content: Container(
         height: MediaQuery.of(context).size.height * 0.15,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextField(
+            TextFormField(
               controller: newTitle,
               decoration: InputDecoration(
                 hintText: '${noteModel.title}'
@@ -31,7 +32,6 @@ class EditModal extends StatelessWidget {
             TextField(
               controller: newDescription,
               decoration: InputDecoration(
-                  hintText: '${noteModel.description}'
               ),
             ),
           ],
