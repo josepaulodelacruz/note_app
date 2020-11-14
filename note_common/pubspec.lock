@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.40.6"
+  animations:
+    dependency: transitive
+    description:
+      name: animations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.2"
   args:
     dependency: transitive
     description:
@@ -106,6 +113,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.0"
+  camera:
+    dependency: transitive
+    description:
+      name: camera
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.8+11"
+  carousel_slider:
+    dependency: transitive
+    description:
+      name: carousel_slider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.1"
   characters:
     dependency: transitive
     description:
@@ -176,6 +197,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  cupertino_icons:
+    dependency: transitive
+    description:
+      name: cupertino_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   dart_style:
     dependency: transitive
     description:
@@ -223,6 +251,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_bloc:
+    dependency: transitive
+    description:
+      name: flutter_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.6"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.11"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -247,6 +289,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  hardware_buttons:
+    dependency: transitive
+    description:
+      name: hardware_buttons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   hive:
     dependency: "direct main"
     description:
@@ -254,6 +303,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.4+1"
+  hive_flutter:
+    dependency: transitive
+    description:
+      name: hive_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   hive_generator:
     dependency: "direct main"
     description:
@@ -282,6 +338,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+  image_picker:
+    dependency: transitive
+    description:
+      name: image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.7+14"
+  image_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: image_picker_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   intl:
     dependency: transitive
     description:
@@ -345,6 +415,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.3"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   node_interop:
     dependency: transitive
     description:
@@ -366,6 +443,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.12"
+  note_ui:
+    dependency: "direct main"
+    description:
+      path: "../note_ui"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   package_config:
     dependency: transitive
     description:
@@ -380,6 +464,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.1"
+  path_provider:
+    dependency: transitive
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.24"
   path_provider_linux:
     dependency: transitive
     description:
@@ -387,6 +478,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.1+2"
+  path_provider_macos:
+    dependency: transitive
+    description:
+      name: path_provider_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4+6"
   path_provider_platform_interface:
     dependency: transitive
     description:
@@ -436,6 +534,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.13"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.3.2+2"
   pub_semver:
     dependency: transitive
     description:
@@ -457,6 +562,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4+1"
+  reorderables:
+    dependency: transitive
+    description:
+      name: reorderables
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   shared_preferences:
     dependency: "direct main"
     description:

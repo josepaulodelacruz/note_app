@@ -19,6 +19,9 @@ dependencies:
   bloc_test: ^7.1.0
   shared_preferences:
 
+  note_ui:
+    path: ../note_ui
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

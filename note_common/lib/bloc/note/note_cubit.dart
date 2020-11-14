@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:note_common/api/note_api.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_common/models/sub_notes.dart';
+import 'package:note_ui/fixtures/random_quotes.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -34,7 +37,11 @@ class NoteCubit extends Cubit<NoteState> {
 
   void addNote(String title, String description) async {
     var uuid = Uuid();
-    final note = NoteModel(uuid.v4(), title, description);
+    var rnd = Random();
+    String desc = description == ""
+        ? quotes[rnd.nextInt(quotes.length)].quotes
+        : description;
+    final note = NoteModel(uuid.v4(), title, desc);
     notes.add(note);
     await noteApi.addNote(notes);
     emit(LoadedNoteState(notes));

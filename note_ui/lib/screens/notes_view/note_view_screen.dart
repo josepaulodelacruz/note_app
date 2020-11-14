@@ -63,7 +63,6 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
           noteModel: noteModel,
           newTitle: _newTitle,
           newDescription: _newDescription,
-
         ),
       ),
       body: Container(
