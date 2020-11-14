@@ -41,11 +41,12 @@ class _HomeScreenState extends State<HomeScreen>
     BlocProvider.of<NoteCubit>(context).onloadGridView();
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is IsView) {
-        setState(() {
-          isView = state.isView;
-        });
-        isView ? _controller.reverse() : _controller.forward();
-
+        if(mounted) {
+          setState(() {
+            isView = state.isView;
+          });
+          isView ? _controller.reverse() : _controller.forward();
+        }
       } else if(state is LoadedNoteState) {
         if(mounted) {
           setState(() {
