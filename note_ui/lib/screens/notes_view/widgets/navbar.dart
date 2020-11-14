@@ -25,6 +25,7 @@ class NavBar extends StatelessWidget {
       elevation: 0,
       actions: [
         PopupMenuButton(
+          icon: Icon(Icons.delete),
           onSelected: (value) {
             if(value == 'delete') {
               showDialog(
@@ -36,17 +37,6 @@ class NavBar extends StatelessWidget {
                   },
                 ),
               );
-            } else if(value == 'edit') {
-              return showDialog(
-                context: context,
-                builder: (_) => EditModal(
-                  noteModel: noteModel,
-                  newTitle: newTitle,
-                  newDescription: newDescription,
-                ),
-              );
-            } else {
-              renderBottomModal();
             }
           },
           itemBuilder: (_) => <PopupMenuItem<String>>[
