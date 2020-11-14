@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_ui/utils/get_initials.dart';
+import 'package:note_ui/fixtures/random_quotes.dart';
 
 class HomeSection extends StatelessWidget {
   List<NoteModel> notes;
@@ -30,6 +32,7 @@ class HomeSection extends StatelessWidget {
 
   Widget _listView (BuildContext context) {
     Widget _noteCard (BuildContext context, NoteModel note, int index) {
+      var rnd = Random();
       final _title = note.checkIfNull() ?
       getInitials(title: note.title) : note.coverPhoto;
       return Container(
@@ -49,10 +52,22 @@ class HomeSection extends StatelessWidget {
               child: Image.file(File(note.subNotes[0].photos[0].imagePath), fit: BoxFit.cover)
           ),
           title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
-          subtitle: Text(note.description, overflow: TextOverflow.ellipsis),
+          subtitle: Text(note.description == "" 
+              ? quotes[rnd.nextInt(quotes.length)].quotes 
+              : note.description, overflow: TextOverflow.ellipsis),
           trailing: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/view', arguments: NoteModel(note.id, note.title, note.description, subNotes: note.subNotes, coverPhoto: note.coverPhoto));
+              Navigator
+                .pushNamed(
+                  context, '/view',
+                  arguments: NoteModel(
+                      note.id,
+                      note.title,
+                      (note.description == ""
+                          ? quotes[rnd.nextInt(quotes.length)].quotes
+                          : note.description),
+                      subNotes: note.subNotes,
+                      coverPhoto: note.coverPhoto));
             },
             icon: Icon(Icons.arrow_forward_ios),
           ),
@@ -84,6 +99,7 @@ class HomeSection extends StatelessWidget {
 
   Widget _gridView (context) {
     Widget _gridTile (BuildContext context, NoteModel note, int index) {
+      var rnd = Random();
       final _title = note.checkIfNull() ?
       getInitials(title: note.title) : note.coverPhoto;
       return GridTile(
@@ -95,7 +111,9 @@ class HomeSection extends StatelessWidget {
           child: GridTileBar(
             backgroundColor: Colors.black45,
             title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
-            subtitle: Text(note.description, overflow: TextOverflow.ellipsis),
+            subtitle: Text(note.description == ""
+                ? quotes[rnd.nextInt(quotes.length)].quotes
+                : note.description, overflow: TextOverflow.ellipsis),
           ),
         ),
         child: Container(
@@ -103,14 +121,16 @@ class HomeSection extends StatelessWidget {
           child: InkWell(
             onTap: () {
               Navigator
-                .pushNamed(
-                context, '/view',
-                arguments: NoteModel(
-                    note.id,
-                    note.title,
-                    note.description,
-                    subNotes: note.subNotes,
-                    coverPhoto: note.coverPhoto));
+                  .pushNamed(
+                  context, '/view',
+                  arguments: NoteModel(
+                      note.id,
+                      note.title,
+                      (note.description == ""
+                          ? quotes[rnd.nextInt(quotes.length)].quotes
+                          : note.description),
+                      subNotes: note.subNotes,
+                      coverPhoto: note.coverPhoto));
             },
             child: note.subNotes.isEmpty || note.subNotes[0].photos.isEmpty ?
             Hero(

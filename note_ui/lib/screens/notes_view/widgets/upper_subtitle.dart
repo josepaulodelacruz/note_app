@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:note_ui/fixtures/random_quotes.dart';
 import 'package:note_ui/screens/notes_view/widgets/edit_modal.dart';
 
 class UpperSubtitle extends StatelessWidget {
@@ -11,6 +12,7 @@ class UpperSubtitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int quotesIndex = quotes.indexWhere((quote) => quote.quotes == noteModel.description);
     return Column(
       children: [
         Padding(
@@ -47,6 +49,17 @@ class UpperSubtitle extends StatelessWidget {
               style: Theme.of(context).textTheme.caption
           ),
         ),
+        if(quotesIndex != -1) ...[
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+                '- ${quotes[quotesIndex].author}',
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.caption
+            ),
+          ),
+        ]
       ],
     );
   }

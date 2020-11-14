@@ -9,8 +9,9 @@ class SearchSection extends StatelessWidget {
   Function clearText;
   Function fuzzySearch;
   List<NoteModel> notes;
+  int shuffleIndex = 0;
 
-  SearchSection({this.input, this.clearText, this.notes, this.fuzzySearch})
+  SearchSection({this.input, this.clearText, this.notes, this.fuzzySearch, this.shuffleIndex})
       : assert(input != null);
 
   @override

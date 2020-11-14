@@ -22,7 +22,7 @@ class InputCard extends StatelessWidget {
               onChanged: (value) {
               },
               validator: (value) {
-                if(value.isEmpty) {
+                if(value.isEmpty && field == 'Title') {
                   return 'Please Enter some Text';
                 }
                 return null;
