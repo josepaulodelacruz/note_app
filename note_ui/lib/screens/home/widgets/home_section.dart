@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_ui/utils/get_initials.dart';
-import 'package:note_ui/fixtures/random_quotes.dart';
 
 class HomeSection extends StatelessWidget {
   List<NoteModel> notes;

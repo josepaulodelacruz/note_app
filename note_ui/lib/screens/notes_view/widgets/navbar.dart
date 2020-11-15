@@ -10,12 +10,14 @@ class NavBar extends StatelessWidget {
   final Function renderBottomModal;
   final TextEditingController newTitle;
   final TextEditingController newDescription;
+  bool isView;
 
   NavBar({
     this.noteModel,
     this.renderBottomModal,
     this.newTitle,
-    this.newDescription
+    this.newDescription,
+    this.isView,
   });
 
   @override
