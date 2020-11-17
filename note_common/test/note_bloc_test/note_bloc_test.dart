@@ -28,6 +28,23 @@ void main () {
 
   group('test', ()  {
     blocTest<NoteCubit, NoteState>(
+        'on Load state',
+        build: () => NoteCubit(NoteApi()),
+        act: (NoteCubit cubit) => cubit.onLoading(),
+        expect: <Matcher>[
+          isA<LoadingNoteState>(),
+          isA<LoadedNoteState>(),
+        ]
+    );
+    blocTest<NoteCubit, NoteState>(
+        'load type grid view',
+        build: () => NoteCubit(NoteApi()),
+        act: (NoteCubit cubit) => cubit.onloadGridView(),
+        expect: <Matcher>[
+          isA<IsView>(),
+        ]
+    );
+    blocTest<NoteCubit, NoteState>(
       'emits [LoadedNoteState]',
       build: () => NoteCubit(NoteApi()),
       act: (NoteCubit cubit) => cubit.addNote('test', 'test'),
@@ -35,6 +52,7 @@ void main () {
         isA<LoadedNoteState>(),
       ]
     );
+
   });
 }
 
