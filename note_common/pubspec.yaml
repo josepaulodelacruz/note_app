@@ -18,6 +18,7 @@ dependencies:
   hive_generator: ^0.8.2
   bloc_test: ^7.1.0
   shared_preferences:
+  equatable:
 
   note_ui:
     path: ../note_ui

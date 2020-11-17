@@ -1,9 +1,15 @@
-
+import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 import 'package:note_common/models/note_model.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-abstract class NoteState {}
+abstract class NoteState extends Equatable {
+  const NoteState();
+
+  @override
+  List<Object> get props => [];
+}
 
 class InitialState extends NoteState {}
 
