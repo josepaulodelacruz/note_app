@@ -33,7 +33,7 @@ class HomeSection extends StatelessWidget {
   Widget _listView (BuildContext context) {
     Widget _noteCard (BuildContext context, NoteModel note, int index) {
       final _title = note.checkIfNull() ?
-      getInitials(title: note.title) : note.coverPhoto;
+      getInitials(title: note.title) : getInitials(title: note.title);
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         width: MediaQuery.of(context).size.width * 0.90,
