@@ -88,10 +88,11 @@ class _BottomModalState extends State<BottomModal>{
                     lastDate: DateTime(2030),
                   );
                   setState(() {
-                    selectedDate = date;
+                    selectedDate =
+                      date == null ? DateTime.now() : date;
                   });
                 },
-                title: Text('${selectedDate.month}/${selectedDate.day}/${selectedDate.year}', textAlign: TextAlign.center)
+                title: Text('${selectedDate.month}/${selectedDate.day}/${selectedDate.year}', textAlign: TextAlign.center),
               ),
             ),
           )
