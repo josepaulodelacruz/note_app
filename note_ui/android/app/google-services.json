@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "83113006535",
+    "firebase_url": "https://lazy-notes-d223b.firebaseio.com",
+    "project_id": "lazy-notes-d223b",
+    "storage_bucket": "lazy-notes-d223b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83113006535:android:26cee2cdb83b27c6fbb5e2",
+        "android_client_info": {
+          "package_name": "com.jeyps.lazy_notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83113006535-hto4j63cqou8qg26jom6ed21vvhlrle1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdbojYgp9OG7E4eZSQuG86kD7lv-FaB-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83113006535-hto4j63cqou8qg26jom6ed21vvhlrle1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
