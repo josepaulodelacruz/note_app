@@ -15,7 +15,7 @@ class UpperHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _title = noteModel.checkIfNull() ?
-    getInitials(title: noteModel.title) : noteModel.coverPhoto;
+    getInitials(title: noteModel.title) : noteModel.title;
     return Container(
       height: MediaQuery
           .of(context)
