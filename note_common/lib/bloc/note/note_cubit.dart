@@ -51,6 +51,7 @@ class NoteCubit extends Cubit<NoteState> {
     int index = notes.indexWhere((element) => element.id == noteModel.id);
     notes[index].subNotes = notes[index].subNotes.toList(growable: true);
     notes[index].subNotes.add(subNotes);
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -59,6 +60,7 @@ class NoteCubit extends Cubit<NoteState> {
     int index = notes.indexWhere((note) => note.id == id);
     notes[index].subNotes = []; // delete subnotes
     notes.removeWhere((note) => note.id == id);
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -70,6 +72,7 @@ class NoteCubit extends Cubit<NoteState> {
     notes[index].description = noteModel.description == ""
         ? quotes[rnd.nextInt(quotes.length)].quotes
         : noteModel.description;
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -78,6 +81,7 @@ class NoteCubit extends Cubit<NoteState> {
     int noteIndex = notes.indexWhere((note) => note.id == noteModel.id);
     int index = noteModel.subNotes.indexWhere((sub) => sub.id == subNotes.id);
     notes[noteIndex].subNotes[index] = subNotes;
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -85,6 +89,7 @@ class NoteCubit extends Cubit<NoteState> {
   void deleteSubNotes(int index, NoteModel noteModel) async {
     int noteIndex = notes.indexWhere((note) => note.id == noteModel.id);
     notes[noteIndex].subNotes.removeAt(index);
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -104,6 +109,7 @@ class NoteCubit extends Cubit<NoteState> {
         : notes[noteIndex].coverPhoto;
 
     notes[noteIndex].subNotes[subIndex].photos.add(picture);
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -114,6 +120,7 @@ class NoteCubit extends Cubit<NoteState> {
         .subNotes
         .indexWhere((subNotes) => subNotes.id == subNoteId);
     notes[noteIndex].subNotes[subIndex].photos = photos;
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
@@ -128,6 +135,7 @@ class NoteCubit extends Cubit<NoteState> {
         .subNotes
         .indexWhere((subNotes) => subNotes.id == subNoteId);
     notes[noteIndex].subNotes[subIndex].photos = photos;
+    emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
   }
