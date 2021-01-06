@@ -3,6 +3,9 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_common/bloc/note/note_cubit.dart';
+import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -26,11 +29,8 @@ class _ViewGalleryState extends State<ViewGallery>{
   void initState () {
     arguments = widget.arguments;
     currentPhoto = arguments.index + 1;
-    print('current photo ${currentPhoto}');
-    setState(() {
-      pageController = PageController(initialPage: arguments.index);
-
-    });
+    pageController = PageController(initialPage: arguments.index);
+    BlocProvider.of<NoteCubit>(context).navPage(arguments.index);
     super.initState();
   }
 
@@ -42,7 +42,13 @@ class _ViewGalleryState extends State<ViewGallery>{
         .height;
     return Scaffold(
       appBar: AppBar(
-          title: Text('${currentPhoto}/${arguments.photos.length}')
+          title: BlocBuilder<NoteCubit, NoteState>(
+            builder: (context, state) {
+              if(state is IsPage) {
+                return Text('${state.page}/${arguments.photos.length}');
+              }
+            },
+          ) ,
       ),
       body: Container(
           color: Colors.black54,
@@ -57,13 +63,12 @@ class _ViewGalleryState extends State<ViewGallery>{
               ImageProvider imageProvider = new MemoryImage(loadData(arguments.photos[index].imagePath));
               return PhotoViewGalleryPageOptions(
                 imageProvider: imageProvider,
-                initialScale: PhotoViewComputedScale.contained * 0.8,
+                initialScale: PhotoViewComputedScale.contained ,
                 heroAttributes: PhotoViewHeroAttributes(tag: arguments.photos[index].id),
               );
             },
             itemCount: arguments.photos.length,
             loadingBuilder: (context, event) {
-              print(event);
               return Center(
                 child: Container(
                   width: 20.0,
@@ -76,10 +81,9 @@ class _ViewGalleryState extends State<ViewGallery>{
                 ),
               );
             },
+            pageController: pageController,
             onPageChanged: (int i) {
-              setState(() {
-                currentPhoto = i + 1;
-              });
+              BlocProvider.of<NoteCubit>(context).navPage(i);
             },
           ),
         )

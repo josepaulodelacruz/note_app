@@ -70,7 +70,7 @@ class SearchSection extends StatelessWidget {
 
   Widget _noteCard (BuildContext context, NoteModel note, int index) {
     final _title = note.checkIfNull() ?
-    getInitials(title: note.title) : note.coverPhoto;
+    getInitials(title: note.title) : getInitials(title: note.title);
     return Container(
       width: MediaQuery.of(context).size.width * 0.90,
       child: ListTile(

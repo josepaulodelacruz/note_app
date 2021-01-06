@@ -14,7 +14,7 @@ class NoteCubit extends Cubit<NoteState> {
   NoteApi noteApi;
   List<SubNotes> sub = List<SubNotes>();
   List<NoteModel> notes = List<NoteModel>();
-
+  int page = 0;
   NoteCubit(this.noteApi) : super(null);
 
   //initialize from memory
@@ -138,6 +138,12 @@ class NoteCubit extends Cubit<NoteState> {
     emit(LoadingNoteState());
     await noteApi.updateNote(notes);
     emit(LoadedNoteState(notes));
+  }
+
+  void navPage (int i) {
+    page = i + 1;
+    emit(IsPage(page));
+
   }
 
   void test() async {

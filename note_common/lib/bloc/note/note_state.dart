@@ -45,3 +45,11 @@ class IsView extends NoteState {
 
   List<Object> get props => [isView];
 }
+
+class IsPage extends NoteState {
+  int page;
+
+  IsPage(this.page);
+
+  List<Object> get props => [page];
+}
