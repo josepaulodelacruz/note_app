@@ -95,7 +95,7 @@ class HomeSection extends StatelessWidget {
   Widget _gridView (context) {
     Widget _gridTile (BuildContext context, NoteModel note, int index) {
       final _title = note.checkIfNull() ?
-      getInitials(title: note.title) : note.coverPhoto;
+      getInitials(title: note.title) : getInitials(title: note.title);
       return GridTile(
         footer: Material(
           color: Colors.transparent,

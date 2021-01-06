@@ -132,7 +132,7 @@ class AlbumSlider extends StatelessWidget {
                                 );
                                 break;
                               case 'delete':
-                                context.bloc<NoteCubit>().deleteSubNotes(index, noteModel);
+                                BlocProvider.of<NoteCubit>(context).deleteSubNotes(index, noteModel);
                                 break;
                             }
                           },
