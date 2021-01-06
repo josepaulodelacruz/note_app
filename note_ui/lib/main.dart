@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => NoteCubit(NoteApi()),
-        )
+        ),
       ],
       child: MaterialApp(
         title: 'Notes Application',
