@@ -177,7 +177,7 @@ class _BottomModalState extends State<BottomModal>{
               BlocProvider.of<NoteCubit>(context).addSubNotes(noteModel, _isSubNotes);
               Navigator.pop(context);
             } else {
-              SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text, photos: []);
+              SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text, photos: editSubNotes.photos);
               BlocProvider.of<NoteCubit>(context).editSubNotes(noteModel, _subNotes, index);
               Navigator.pop(context);
             }
