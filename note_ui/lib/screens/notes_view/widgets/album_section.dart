@@ -80,37 +80,37 @@ class AlbumSection extends StatelessWidget {
                       );
                     },
                     child: GridTile(
-                        footer: Material(
-                          color: Colors.transparent,
-                          shape: const RoundedRectangleBorder(
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: GridTileBar(
-                            backgroundColor: Colors.black45,
-                            title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
-                          ),
+                      footer: Material(
+                        color: Colors.transparent,
+                        shape: const RoundedRectangleBorder(
                         ),
-                        child: Container(
-                          color: Color(0xFF333333),
-                          child: Stack(
-                                children: [
-                                  if(note.photos.length > 0) ...[
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Image.file(File(note.photos[0].imagePath), fit: BoxFit.cover, width: 150),
-                                    ),
-                                  ],
+                        clipBehavior: Clip.antiAlias,
+                        child: GridTileBar(
+                          backgroundColor: Colors.black45,
+                          title: Text(note.title, style: Theme.of(context).textTheme.bodyText1),
+                        ),
+                      ),
+                      child: Container(
+                        color: Color(0xFF333333),
+                        child: Stack(
+                              children: [
+                                if(note.photos.length > 0) ...[
                                   Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text('${note.isDate.month}/${note.isDate.day}/${note.isDate.year}', style: Theme.of(context).textTheme.caption)
+                                    alignment: Alignment.center,
+                                    child: Image.file(File(note.photos[0].imagePath), fit: BoxFit.cover, width: 150),
                                   ),
-                                  Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Text('${note.title}', style: Theme.of(context).textTheme.caption)
-                                  )
                                 ],
-                              )
-                          ),
+                                Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text('${note.isDate.month}/${note.isDate.day}/${note.isDate.year}', style: Theme.of(context).textTheme.caption)
+                                ),
+                                Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text('${note.title}', style: Theme.of(context).textTheme.caption)
+                                )
+                              ],
+                        )
+                      ),
                     ),
                   );
                 })?.toList() ?? [],

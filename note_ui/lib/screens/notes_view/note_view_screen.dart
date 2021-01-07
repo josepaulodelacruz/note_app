@@ -60,63 +60,63 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: NavBar(
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: NavBar(
+          noteModel: noteModel,
+          newTitle: _newTitle,
+          newDescription: _newDescription,
+          isView: isView,
+        ),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: PageTransitionSwitcher(
+          transitionBuilder: (child, animation, secondaryAnimation) {
+            return SharedAxisTransition(
+              child: child,
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.vertical,
+              fillColor: Color(0xFF111111),
+            );
+          },
+          child: !isView ? CollectionsSection(
             noteModel: noteModel,
+            subNotes: subNotes,
             newTitle: _newTitle,
             newDescription: _newDescription,
             isView: isView,
-          ),
-        ),
-        body: Container(
-            height: MediaQuery.of(context).size.height,
-            child: PageTransitionSwitcher(
-                transitionBuilder: (child, animation, secondaryAnimation) {
-                  return SharedAxisTransition(
-                    child: child,
-                    animation: animation,
-                    secondaryAnimation: secondaryAnimation,
-                    transitionType: SharedAxisTransitionType.vertical,
-                    fillColor: Color(0xFF111111),
-                  );
-                },
-                child: !isView ? CollectionsSection(
-                  noteModel: noteModel,
-                  subNotes: subNotes,
-                  newTitle: _newTitle,
-                  newDescription: _newDescription,
-                  isView: isView,
-                  expand: (view) => setState(() => isView = view),
-                  isSetState: (note) {
-                    setState(() {
-                      subNotes =
-                      note.photos.isEmpty ? null : note;
-                    });
-                  },
-                ) :
-                AlbumSection(
-                  isView: isView,
-                  noteModel: noteModel,
-                  expand: (view) => setState(() => isView = view),
-                  renderBottomModal: () {
-                    return showModalBottomSheet(
-                        context: context,
-                        builder: (_) => SingleChildScrollView(
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: BottomModal(
-                                noteModel: noteModel,
-                                selectedDate: selectedDate,
-                              ),
-                            )
-                        )
-                    );
-                  },
+            expand: (view) => setState(() => isView = view),
+            isSetState: (note) {
+              setState(() {
+                subNotes =
+                note.photos.isEmpty ? null : note;
+              });
+            },
+          ) :
+          AlbumSection(
+            isView: isView,
+            noteModel: noteModel,
+            expand: (view) => setState(() => isView = view),
+            renderBottomModal: () {
+              return showModalBottomSheet(
+                context: context,
+                builder: (_) => SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: BottomModal(
+                      noteModel: noteModel,
+                      selectedDate: selectedDate,
+                    ),
+                  )
                 )
-            )
+              );
+            },
+          )
         )
+      )
     );
   }
 }

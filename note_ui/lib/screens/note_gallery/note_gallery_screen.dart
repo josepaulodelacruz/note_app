@@ -100,8 +100,16 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                     _onDelete();
                     break;
                   case 'delete-album':
-                    BlocProvider.of<NoteCubit>(context).deleteSubNotes(widget.arguments.index, widget.arguments.noteModel);
-                    Navigator.pop(context);
+                    return showDialog(
+                      context: context,
+                      child: ConfirmationModal(
+                        handle: () {
+                          BlocProvider.of<NoteCubit>(context).deleteSubNotes(widget.arguments.index, widget.arguments.noteModel);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      )
+                    );
                     break;
                   default:
                     break;
