@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
@@ -16,7 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
   with TickerProviderStateMixin {
-
+  MobileAdTargetingInfo targetingInfo;
+  BannerAd myBanner;
   Animation<double> _myAnimation;
   AnimationController _controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -25,6 +29,26 @@ class _HomeScreenState extends State<HomeScreen>
   List<NoteModel> noteModels;
   List<NoteModel> searchNotes;
   bool isView = false;
+  bool disposed = false;
+
+  BannerAd buildBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      listener: (MobileAdEvent event) {
+        if(event == MobileAdEvent.loaded) {
+          if(disposed) {
+            myBanner.dispose();
+          } else {
+            myBanner..show(
+                anchorType: AnchorType.bottom,
+                anchorOffset: MediaQuery.of(context).size.height * 0.12
+            );
+          }
+        }
+      }
+    );
+  }
 
   @override
   void initState () {
@@ -55,10 +79,39 @@ class _HomeScreenState extends State<HomeScreen>
         }
       }
     });
+
+   targetingInfo = MobileAdTargetingInfo(
+      keywords: <String>['flutterio', 'beautiful apps'],
+      contentUrl: 'https://flutter.io',
+      childDirected: false,
+      testDevices: <String>[], // Android emulators are considered test devices
+    );
+
+    myBanner =  buildBannerAd()..load();
+    // this.loadAd();
+  }
+  void displayBanner() async {
+    disposed = false;
+    if(myBanner == null) myBanner = buildBannerAd();
+    myBanner.load();
+  }
+
+  void hideBanner() async {
+    await myBanner?.dispose();
+    disposed = true;
+    myBanner = null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    myBanner?.dispose();
+    hideBanner();
   }
 
   @override
   Widget build(BuildContext context) {
+    displayBanner();
     final node = FocusScope.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -80,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async {
           Navigator.pushNamed(context, '/add');
         },
       ),
@@ -103,7 +156,11 @@ class _HomeScreenState extends State<HomeScreen>
         child: _pageIndex == 0 ?
           HomeSection(
               notes: noteModels,
-              isView: isView) :
+              isView: isView,
+              closeAd: () {
+                print('closing adds');
+                hideBanner();
+              }) :
           SearchSection(
             notes: searchNotes,
             input: _searchInput,

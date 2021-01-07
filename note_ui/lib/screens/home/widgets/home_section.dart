@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:animations/animations.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_ui/utils/get_initials.dart';
@@ -10,8 +11,9 @@ import 'package:note_ui/fixtures/random_quotes.dart';
 class HomeSection extends StatelessWidget {
   List<NoteModel> notes;
   bool isView;
+  final Function closeAd;
 
-  HomeSection({this.notes, this.isView});
+  HomeSection({this.notes, this.isView, this.closeAd});
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,7 @@ class HomeSection extends StatelessWidget {
           subtitle: Text(note.description, overflow: TextOverflow.ellipsis),
           trailing: IconButton(
             onPressed: () {
+              closeAd();
               Navigator
                 .pushNamed(
                   context, '/view',
@@ -75,7 +78,6 @@ class HomeSection extends StatelessWidget {
         Container(
           color: Color(0xFF111111),
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
           child: ListView(
             children: ListTile.divideTiles(
               context: context,
@@ -112,6 +114,7 @@ class HomeSection extends StatelessWidget {
           color: Color(0xFF333333),
           child: InkWell(
             onTap: () {
+              closeAd();
               Navigator
                   .pushNamed(
                   context, '/view',
