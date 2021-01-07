@@ -7,6 +7,7 @@ import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_ui/model/screen_argument.dart';
+import 'package:note_ui/screens/note_gallery/widgets/MySliverAppBar.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
 import 'package:note_ui/widgets/confirmation_modal.dart';
 import 'package:reorderables/reorderables.dart';
@@ -27,6 +28,7 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   bool _isSelect = false;
   bool _isArrange = false;
   List<Photo> _photos = List<Photo>();
+  bool _isAnimate = false;
 
   @override
   void initState () {
@@ -52,54 +54,44 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
         _unSelectItem();
         Navigator.pop(context);
       },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              _unSelectItem();
-              Navigator.pop(context);
-            },
-          ),
-          title: Text('Gallery'),
-          actions: [
-            if(_isSelect) ...[
-              Align(
-                alignment: Alignment.center,
-                child: Text('Selected: ${_isSelected}'),
-              )
-            ],
-            PopupMenuButton(
-              onSelected: (value) async {
-                switch(value) {
-                  case 'select':
+      child: SafeArea(
+        child: Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                pinned: false,
+                floating: false,
+                delegate: MySliverAppBar(
+                  subNotes: widget.arguments.subNotes,
+                  expandedHeight: 200,
+                  isAnimate: _isAnimate,
+                  isSelect: _isSelect,
+                  isSelected: _isSelected,
+                  funcIsSelect: () {
                     setState(() {
                       _isSelect = !_isSelect;
                     });
                     _unSelectAll();
-                    break;
-                  case 'edit':
+                  },
+                  funcEdit: () {
                     return showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (_) => SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: BottomModal(
-                              isEdit: true,
-                              editSubNotes: widget.arguments.subNotes,
-                              noteModel: widget.arguments.noteModel,
-                              selectedDate: widget.arguments.noteModel.subNotes[widget.arguments.index].isDate,
-                              index: widget.arguments.index,
-                            ),
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) => SingleChildScrollView(
+                        child: Container(
+                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: BottomModal(
+                            isEdit: true,
+                            editSubNotes: widget.arguments.subNotes,
+                            noteModel: widget.arguments.noteModel,
+                            selectedDate: widget.arguments.noteModel.subNotes[widget.arguments.index].isDate,
+                            index: widget.arguments.index,
                           ),
-                        )
+                        ),
+                      )
                     );
-                    break;
-                  case 'delete':
-                    _onDelete();
-                    break;
-                  case 'delete-album':
+                  },
+                  funcDelete: () {
                     return showDialog(
                       context: context,
                       child: ConfirmationModal(
@@ -110,59 +102,44 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                         },
                       )
                     );
-                    break;
-                  default:
-                    break;
-                }
-              },
-              itemBuilder: (_) => <PopupMenuItem<String>>[
-                new PopupMenuItem<String>(
-                  value: 'select',
-                  child: Text(_isSelect ? 'Unselect' : 'Select'),
+                  }
                 ),
-                new PopupMenuItem<String>(
-                  value: 'edit',
-                  child: Text('Edit'),
-                ),
-                new PopupMenuItem<String>(
-                  value: 'delete-album',
-                  child: Text('Delete Album'),
-                ),
+              ),
+              SliverToBoxAdapter(
+                child: _picGrid()
+              )
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              if(!_isSelect) {
+                final cameras = await availableCameras();
+                final firstCamera = cameras.first;
+                Navigator
+                    .pushNamed(
+                    context, '/camera',
+                    arguments: ScreenArguments(
+                        firstCamera: firstCamera,
+                        noteId: widget.arguments.noteId,
+                        subNoteId: widget.arguments.subNoteId,
+                        photos: widget.arguments.photos));
+              } else {
+                _onDelete();
+              }
 
-              ],
-            ),
-          ],
-        ),
-        body: _picGrid(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            if(!_isSelect) {
-              final cameras = await availableCameras();
-              final firstCamera = cameras.first;
-              Navigator
-                  .pushNamed(
-                  context, '/camera',
-                  arguments: ScreenArguments(
-                      firstCamera: firstCamera,
-                      noteId: widget.arguments.noteId,
-                      subNoteId: widget.arguments.subNoteId,
-                      photos: widget.arguments.photos));
-            } else {
-              _onDelete();
-            }
-
-          },
-          child: Icon(_isSelect ? Icons.delete : Icons.photo_camera),
+            },
+            child: Icon(_isSelect ? Icons.delete : Icons.photo_camera),
+          ),
         ),
       ),
     );
   }
 
   Widget _picGrid () {
-    double height = MediaQuery.of(context).size.height * 0.20;
+    double height = MediaQuery.of(context).size.height * 0.21;
     double width = MediaQuery.of(context).size.width * 0.30;
     return ReorderableWrap(
-      padding: EdgeInsets.all(5.0),
+      padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 0),
       minMainAxisCount: 3,
       maxMainAxisCount: 3,
       children: _photos.map((pic) {
@@ -278,3 +255,5 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   }
 
 }
+
+

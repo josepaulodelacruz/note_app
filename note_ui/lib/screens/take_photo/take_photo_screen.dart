@@ -77,12 +77,8 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
       childDirected: false,
       testDevices: <String>[], // Android emulators are considered test devices
     );
-
-    // myBanner =  buildBannerAd()..load();
-
+    myBanner =  buildBannerAd()..load();
   }
-
-
 
   void _takePhoto () async {
     var uuid = Uuid();
