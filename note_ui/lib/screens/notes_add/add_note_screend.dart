@@ -3,33 +3,70 @@ import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_ui/screens/home/widgets/inputs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_ui/utils/appbar_shape.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 class AddNoteScreen extends StatefulWidget {
   @override
   createState () => _AddNoteScreenState();
 }
 
-class _AddNoteScreenState extends State<AddNoteScreen> with
-    TickerProviderStateMixin {
-  Animation<double> _myAnimation;
-  AnimationController _controller;
+class _AddNoteScreenState extends State<AddNoteScreen>  {
+  MobileAdTargetingInfo targetingInfo;
+  BannerAd myBanner;
+  bool disposed = false;
   final _title = TextEditingController();
   final _description = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  BannerAd buildBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      listener: (MobileAdEvent event) {
+        if(event == MobileAdEvent.loaded) {
+          if(disposed) {
+            myBanner.dispose();
+          } else {
+            myBanner..show(
+                anchorType: AnchorType.bottom,
+                anchorOffset: MediaQuery.of(context).size.height * 0.12
+            );
+          }
+        }
+      }
+    );
+  }
 
   @override
   void initState () {
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
+    super.initState();
+    targetingInfo = MobileAdTargetingInfo(
+      keywords: <String>['flutterio', 'beautiful apps'],
+      contentUrl: 'https://flutter.io',
+      childDirected: false,
+      testDevices: <String>[], // Android emulators are considered test devices
     );
 
-    _myAnimation = CurvedAnimation(
-      curve: Curves.linear,
-      parent: _controller,
-    );
-    super.initState();
+    myBanner =  buildBannerAd()..load();
+  }
+
+  void displayBanner() async {
+    disposed = false;
+    if(myBanner == null) myBanner = buildBannerAd();
+    myBanner.load();
+  }
+
+  void hideBanner() async {
+    await myBanner?.dispose();
+    disposed = true;
+    myBanner = null;
+  }
+
+  @override
+  void dispose() {
+    myBanner?.dispose();
+    hideBanner();
+    super.dispose();
   }
 
   @override

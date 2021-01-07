@@ -104,14 +104,13 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    super.dispose();
     myBanner?.dispose();
     hideBanner();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    displayBanner();
     final node = FocusScope.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -134,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
+          hideBanner();
           Navigator.pushNamed(context, '/add');
         },
       ),
