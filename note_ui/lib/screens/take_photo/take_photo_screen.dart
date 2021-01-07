@@ -181,7 +181,7 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
                               width: 50,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Color(0xFF111111),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: _imagePath != '' ? Image.file(
