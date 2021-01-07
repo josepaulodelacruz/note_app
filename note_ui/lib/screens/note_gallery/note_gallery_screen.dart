@@ -7,6 +7,7 @@ import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
 import 'package:note_ui/model/screen_argument.dart';
+import 'package:note_ui/widgets/bottom_modal.dart';
 import 'package:note_ui/widgets/confirmation_modal.dart';
 import 'package:reorderables/reorderables.dart';
 
@@ -77,8 +78,30 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                     });
                     _unSelectAll();
                     break;
+                  case 'edit':
+                    return showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (_) => SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                            child: BottomModal(
+                              isEdit: true,
+                              editSubNotes: widget.arguments.subNotes,
+                              noteModel: widget.arguments.noteModel,
+                              selectedDate: widget.arguments.noteModel.subNotes[widget.arguments.index].isDate,
+                              index: widget.arguments.index,
+                            ),
+                          ),
+                        )
+                    );
+                    break;
                   case 'delete':
                     _onDelete();
+                    break;
+                  case 'delete-album':
+                    BlocProvider.of<NoteCubit>(context).deleteSubNotes(widget.arguments.index, widget.arguments.noteModel);
+                    Navigator.pop(context);
                     break;
                   default:
                     break;
@@ -89,6 +112,15 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                   value: 'select',
                   child: Text(_isSelect ? 'Unselect' : 'Select'),
                 ),
+                new PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Text('Edit'),
+                ),
+                new PopupMenuItem<String>(
+                  value: 'delete-album',
+                  child: Text('Delete Album'),
+                ),
+
               ],
             ),
           ],

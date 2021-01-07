@@ -164,6 +164,7 @@ class _BottomModalState extends State<BottomModal>{
             onPressed: () {
               BlocProvider.of<NoteCubit>(context).deleteSubNotes(index, noteModel);
               Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Text('Delete'),
           )

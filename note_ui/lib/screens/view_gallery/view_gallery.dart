@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
@@ -20,7 +18,6 @@ class ViewGallery extends StatefulWidget {
 }
 
 class _ViewGalleryState extends State<ViewGallery>{
-  CarouselController photoSlider = CarouselController();
   ScreenArguments arguments;
   int currentPhoto;
   PageController pageController;
