@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +26,32 @@ class TakePhotoScreen extends StatefulWidget {
 }
 
 class _TakePhotoScreen extends State<TakePhotoScreen> {
+  MobileAdTargetingInfo targetingInfo;
+  InterstitialAd myBanner;
+  bool disposed = false;
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   var _imagePath;
   bool _isCamera = false;
   bool _trigger = false;
+
+  InterstitialAd buildBannerAd() {
+    return InterstitialAd(
+        adUnitId: InterstitialAd.testAdUnitId,
+        listener: (MobileAdEvent event) {
+          if(event == MobileAdEvent.loaded) {
+            if(disposed) {
+              myBanner.dispose();
+            } else {
+              myBanner..show(
+                  anchorType: AnchorType.bottom,
+                  anchorOffset: MediaQuery.of(context).size.height * 0.12
+              );
+            }
+          }
+        }
+    );
+  }
 
   @override
   void initState () {
@@ -49,13 +71,18 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
       });
 
     });
+    targetingInfo = MobileAdTargetingInfo(
+      keywords: <String>['flutterio', 'beautiful apps'],
+      contentUrl: 'https://flutter.io',
+      childDirected: false,
+      testDevices: <String>[], // Android emulators are considered test devices
+    );
+
+    // myBanner =  buildBannerAd()..load();
+
   }
 
-  @override
-  void dispose () {
-    _controller.dispose();
-    super.dispose();
-  }
+
 
   void _takePhoto () async {
     var uuid = Uuid();
@@ -116,6 +143,25 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
         );
       }
     );
+  }
+
+  void displayBanner() async {
+    disposed = false;
+    if(myBanner == null) myBanner = buildBannerAd();
+    myBanner.load();
+  }
+
+  void hideBanner() async {
+    await myBanner?.dispose();
+    disposed = true;
+    myBanner = null;
+  }
+
+  @override
+  void dispose () {
+    myBanner?.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
