@@ -50,6 +50,13 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Opacity(
+                        opacity: (1 - shrinkOffset / expandedHeight),
+                        child: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(Icons.arrow_back, color: Colors.white),
+                        ),
+                      ),
                       Text(
                         "Gallery ",
                         style: TextStyle(
@@ -58,6 +65,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                           fontSize: 18,
                         ),
                       ),
+                      Spacer(),
                       Container(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,40 +73,43 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                             if(isSelect) ...[
                               Text('Selected: ${isSelected}')
                             ],
-                            PopupMenuButton(
-                              onSelected: (value) async {
-                                switch(value) {
-                                  case 'select':
-                                    funcIsSelect();
-                                    break;
-                                  case 'edit':
-                                    funcEdit();
-                                    break;
-                                  case 'delete':
-                                  // _onDelete();
-                                    break;
-                                  case 'delete-album':
-                                    funcDelete();
-                                    break;
-                                  default:
-                                    break;
-                                }
-                              },
-                              itemBuilder: (_) => <PopupMenuItem<String>>[
-                                new PopupMenuItem<String>(
-                                  value: 'select',
-                                  child: Text(isSelect ? 'Unselect' : 'Select'),
-                                ),
-                                new PopupMenuItem<String>(
-                                  value: 'edit',
-                                  child: Text('Edit'),
-                                ),
-                                new PopupMenuItem<String>(
-                                  value: 'delete-album',
-                                  child: Text('Delete Album'),
-                                ),
+                            Opacity(
+                              opacity: (1 - shrinkOffset / expandedHeight),
+                              child: PopupMenuButton(
+                                onSelected: (value) async {
+                                  switch(value) {
+                                    case 'select':
+                                      funcIsSelect();
+                                      break;
+                                    case 'edit':
+                                      funcEdit();
+                                      break;
+                                    case 'delete':
+                                    // _onDelete();
+                                      break;
+                                    case 'delete-album':
+                                      funcDelete();
+                                      break;
+                                    default:
+                                      break;
+                                  }
+                                },
+                                itemBuilder: (_) => <PopupMenuItem<String>>[
+                                  new PopupMenuItem<String>(
+                                    value: 'select',
+                                    child: Text(isSelect ? 'Unselect' : 'Select'),
+                                  ),
+                                  new PopupMenuItem<String>(
+                                    value: 'edit',
+                                    child: Text('Edit'),
+                                  ),
+                                  new PopupMenuItem<String>(
+                                    value: 'delete-album',
+                                    child: Text('Delete Album'),
+                                  ),
 
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         )
