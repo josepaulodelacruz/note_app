@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   BannerAd buildBannerAd() {
     return BannerAd(
-      adUnitId: AdMobService.bannerAd(),
+      adUnitId: AdMobService.bannerAd1(),
       size: AdSize.banner,
       listener: (MobileAdEvent event) {
         if(event == MobileAdEvent.loaded) {
@@ -152,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen>
               notes: noteModels,
               isView: isView,
               closeAd: () {
-                print('closing adds');
                 hideBanner();
               }) :
           SearchSection(

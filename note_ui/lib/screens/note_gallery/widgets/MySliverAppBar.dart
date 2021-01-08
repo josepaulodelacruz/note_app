@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:note_common/models/sub_notes.dart';
 
 class MySliverAppBar extends SliverPersistentHeaderDelegate {
@@ -23,6 +24,11 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
     this.funcEdit,
     this.funcDelete,
   });
+
+  Widget _fromNow() {
+    var fromNow = Jiffy(subNotes.isDate).fromNow();
+    return Text(fromNow);
+  }
 
   @override
   Widget build( BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -128,7 +134,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                           ),
                           Align(
                             alignment: Alignment.bottomRight,
-                            child: Text(subNotes.isDate.toString()),
+                            child: _fromNow(),
                           )
                         ],
                       )

@@ -36,7 +36,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
 
   BannerAd buildBannerAd() {
     return BannerAd(
-        adUnitId: AdMobService.bannerAd(),
+        adUnitId: AdMobService.bannerAd3(),
         size: AdSize.banner,
         listener: (MobileAdEvent event) {
           if(event == MobileAdEvent.loaded) {
@@ -76,7 +76,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
       }
     });
 
-    myBanner =  buildBannerAd()..load();
+    // myBanner =  buildBannerAd()..load();
   }
 
   void displayBanner() async {
@@ -86,9 +86,14 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
   }
 
   void hideBanner() async {
-    await myBanner?.dispose();
-    disposed = true;
-    myBanner = null;
+    try {
+      await myBanner?.dispose();
+      disposed = true;
+      myBanner = null;
+    } catch(err) {
+      print(err);
+    }
+
   }
 
   @override

@@ -21,7 +21,7 @@ class _AddNoteScreenState extends State<AddNoteScreen>  {
 
   BannerAd buildBannerAd() {
     return BannerAd(
-      adUnitId: AdMobService.bannerAd(),
+      adUnitId: AdMobService.bannerAd2(),
       size: AdSize.banner,
       listener: (MobileAdEvent event) {
         if(event == MobileAdEvent.loaded) {
@@ -52,9 +52,14 @@ class _AddNoteScreenState extends State<AddNoteScreen>  {
   }
 
   void hideBanner() async {
-    await myBanner?.dispose();
-    disposed = true;
-    myBanner = null;
+    try {
+      await myBanner?.dispose();
+      disposed = true;
+      myBanner = null;
+    } catch (err) {
+      print(err);
+    }
+
   }
 
   @override
