@@ -141,6 +141,21 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                 note.photos.isEmpty ? null : note;
               });
             },
+            renderBottomModal: () {
+              return showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (_) => SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: BottomModal(
+                      noteModel: noteModel,
+                      selectedDate: selectedDate,
+                    ),
+                  )
+                )
+              );
+            },
           ) :
           AlbumSection(
             isView: isView,
@@ -148,6 +163,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
             expand: (view) => setState(() => isView = view),
             renderBottomModal: () {
               return showModalBottomSheet(
+                isScrollControlled: true,
                 context: context,
                 builder: (_) => SingleChildScrollView(
                   child: Container(

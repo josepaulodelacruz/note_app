@@ -25,27 +25,27 @@ class AlbumSection extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: InkWell(
-                    onTap: () => expand(false),
-                    child: Text('Collections',
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(color: !isView ?
-                        Colors.yellowAccent : Colors.white))
+                  onTap: () => expand(false),
+                  child: Text('Collections',
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(color: !isView ?
+                    Colors.yellowAccent : Colors.white))
                 ),
               ),
               Padding(
                 padding: EdgeInsets.zero,
                 child: InkWell(
-                    onTap: () => expand(true),
-                    child: Text('Albums', style: Theme.of(context).textTheme.subtitle1.copyWith(color: isView ?
-                    Colors.yellowAccent : Colors.white))),
+                  onTap: () => expand(true),
+                  child: Text('Albums', style: Theme.of(context).textTheme.subtitle1.copyWith(color: isView ?
+                  Colors.yellowAccent : Colors.white))),
               ),
               Spacer(),
               Padding(
                 padding: const EdgeInsets.only(right: 32.0),
                 child: GestureDetector(
-                    onTap: () {
-                      renderBottomModal();
-                    },
-                    child: Icon(Icons.add_a_photo)
+                  onTap: () {
+                    renderBottomModal();
+                  },
+                  child: Icon(Icons.add_a_photo)
                 ),
               ),
             ],
@@ -93,22 +93,22 @@ class AlbumSection extends StatelessWidget {
                       child: Container(
                         color: Color(0xFF333333),
                         child: Stack(
-                              children: [
-                                if(note.photos.length > 0) ...[
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Image.file(File(note.photos[0].imagePath), fit: BoxFit.cover, width: 150),
-                                  ),
-                                ],
-                                Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text('${note.isDate.month}/${note.isDate.day}/${note.isDate.year}', style: Theme.of(context).textTheme.caption)
-                                ),
-                                Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text('${note.title}', style: Theme.of(context).textTheme.caption)
-                                )
-                              ],
+                          children: [
+                            if(note.photos.length > 0) ...[
+                              Align(
+                                alignment: Alignment.center,
+                                child: Image.file(File(note.photos[0].imagePath), fit: BoxFit.cover, width: 150),
+                              ),
+                            ],
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text('${note.isDate.month}/${note.isDate.day}/${note.isDate.year}', style: Theme.of(context).textTheme.caption)
+                            ),
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text('${note.title}', style: Theme.of(context).textTheme.caption)
+                            )
+                          ],
                         )
                       ),
                     ),

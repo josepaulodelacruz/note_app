@@ -15,6 +15,7 @@ class CollectionsSection extends StatelessWidget {
   DateTime selectedDate = DateTime.now();
   final Function expand;
   final Function isSetState;
+  final Function renderBottomModal;
 
 
   CollectionsSection({
@@ -24,7 +25,8 @@ class CollectionsSection extends StatelessWidget {
     this.isView,
     this.subNotes,
     this.expand,
-    this.isSetState});
+    this.isSetState,
+    this.renderBottomModal});
 
   @override
   Widget build(BuildContext context) {
@@ -32,31 +34,18 @@ class CollectionsSection extends StatelessWidget {
       child: Column(
         children: [
           UpperHeader(
-              noteModel: noteModel,
-              subNotes: subNotes),
+            noteModel: noteModel,
+            subNotes: subNotes),
           UpperSubtitle(
-              noteModel: noteModel,
-              newTitle: newTitle,
-              newDescription:  newDescription),
+            noteModel: noteModel,
+            newTitle: newTitle,
+            newDescription:  newDescription),
           AlbumSlider(
-              noteModel: noteModel,
-              isView: isView,
-              renderBottomModal: () {
-                return showModalBottomSheet(
-                    context: context,
-                    builder: (_) => SingleChildScrollView(
-                        child: Container(
-                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: BottomModal(
-                            noteModel: noteModel,
-                            selectedDate: selectedDate,
-                          ),
-                        )
-                    )
-                );
-              },
-              isSetState: (note) => isSetState(note),
-              expand: (view) => expand(view)),
+            noteModel: noteModel,
+            isView: isView,
+            renderBottomModal: () { renderBottomModal(); },
+            isSetState: (note) => isSetState(note),
+            expand: (view) => expand(view)),
         ],
       ),
     );
