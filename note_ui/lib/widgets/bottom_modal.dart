@@ -43,8 +43,8 @@ class _BottomModalState extends State<BottomModal>{
     isEdit = widget.isEdit;
     index = widget.index;
     editSubNotes = widget.editSubNotes;
-    subNotes.text = widget.editSubNotes.subTitle;
-    subject.text = widget.editSubNotes.title;
+    subNotes.text = widget.editSubNotes?.subTitle ?? '';
+    subject.text = widget.editSubNotes?.title ?? '';
     selectedDate = editSubNotes != null ? editSubNotes.isDate : DateTime.now();
   }
 

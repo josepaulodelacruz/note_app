@@ -109,21 +109,21 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                       child: Stack(
                         children: [
                           Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: expandedHeight,
-                              child: Text(
-                                '${subNotes.subTitle}',
-                                textAlign: TextAlign.left,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 4,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
-                                  height: 2,
-                                )
-                              ),
+                            alignment: Alignment.topLeft,
+                            child: subNotes.subTitle != "" ? Text(
+                              '${subNotes.subTitle}',
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 4,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white,
+                                height: 2,
+                              )
+                            ) : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('No Written Notes', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18)),
                             ),
                           ),
                           Align(
