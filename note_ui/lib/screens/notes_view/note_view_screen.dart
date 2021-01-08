@@ -46,7 +46,6 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
                   anchorType: AnchorType.bottom,
                   anchorOffset: MediaQuery.of(context).size.height * 0.85
               );
-
               Timer.periodic(Duration(seconds: 3), (timer) {
                 hideBanner();
               });

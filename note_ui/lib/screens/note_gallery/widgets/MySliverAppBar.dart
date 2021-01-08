@@ -33,7 +33,8 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
         Align(
           alignment: Alignment.topCenter,
           child: Container(
-            color: Color(0xFF2222222),
+            margin: EdgeInsets.only(bottom: 20),
+            color: Color(0xFF444444),
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Stack(
@@ -104,7 +105,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                   child: Opacity(
                     opacity: (1 - shrinkOffset  / expandedHeight ),
                     child: Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: EdgeInsets.only(top: 40),
                       child: Stack(
                         children: [
                           Align(

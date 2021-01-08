@@ -47,13 +47,14 @@ class UpperHeader extends StatelessWidget {
                         Container(
                           child: InkWell(
                             onTap: () {
-                              Navigator
-                                .pushNamed(
+                              Navigator.pushNamed(
                                 context, '/gallery',
                                 arguments: ScreenArguments(
+                                    subNotes: subNotes,
                                     photos: subNotes.photos,
                                     index: index,
                                     noteId: noteModel.id,
+                                    noteModel: noteModel,
                                     subNoteId: subNotes.id)
                               );
                             },
