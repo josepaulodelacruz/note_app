@@ -6,6 +6,7 @@ import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_common/bloc/note/note_state.dart';
 import 'package:note_common/models/note_model.dart';
 import 'package:note_common/models/pictures.dart';
+import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/screens/note_gallery/widgets/MySliverAppBar.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
@@ -24,6 +25,7 @@ class NoteGalleryScreen extends StatefulWidget {
 
 class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   NoteModel noteModel;
+  SubNotes subNotes;
   int _isSelected = 0;
   bool _isSelect = false;
   bool _isArrange = false;
@@ -33,13 +35,15 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
   @override
   void initState () {
     super.initState();
+    subNotes = widget.arguments.subNotes;
     _photos = widget.arguments.photos;
     BlocProvider.of<NoteCubit>(context).listen((state) {
       if(state is LoadedNoteState) {
-        NoteModel a = 
+        NoteModel a =
             state.notes.firstWhere((note) => widget.arguments.noteId == note.id, orElse: () => null);
         if(mounted) {
           setState(() {
+            subNotes = widget.arguments.subNotes;
             noteModel = a;
           });
         }
@@ -62,7 +66,7 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                 pinned: false,
                 floating: false,
                 delegate: MySliverAppBar(
-                  subNotes: widget.arguments.subNotes,
+                  subNotes: subNotes,
                   expandedHeight: 200,
                   isAnimate: _isAnimate,
                   isSelect: _isSelect,
@@ -86,6 +90,13 @@ class _NoteGalleryScreenState extends State<NoteGalleryScreen>{
                             noteModel: widget.arguments.noteModel,
                             selectedDate: widget.arguments.noteModel.subNotes[widget.arguments.index].isDate,
                             index: widget.arguments.index,
+                            funcEdit: (title, subTitle, date) {
+                              setState(() {
+                                subNotes.title = title;
+                                subNotes.subTitle = subTitle;
+                                subNotes.isDate = date;
+                              });
+                            },
                           ),
                         ),
                       )

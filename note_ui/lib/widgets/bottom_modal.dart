@@ -11,6 +11,7 @@ class BottomModal extends StatefulWidget {
   NoteModel noteModel;
   SubNotes editSubNotes;
   DateTime selectedDate;
+  final Function funcEdit;
 
   BottomModal({
     Key key,
@@ -19,6 +20,7 @@ class BottomModal extends StatefulWidget {
     this.isEdit = false,
     this.selectedDate,
     this.noteModel,
+    this.funcEdit,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,8 @@ class _BottomModalState extends State<BottomModal>{
     isEdit = widget.isEdit;
     index = widget.index;
     editSubNotes = widget.editSubNotes;
+    subNotes.text = widget.editSubNotes.subTitle;
+    subject.text = widget.editSubNotes.title;
     selectedDate = editSubNotes != null ? editSubNotes.isDate : DateTime.now();
   }
 
@@ -180,6 +184,7 @@ class _BottomModalState extends State<BottomModal>{
             } else {
               SubNotes _subNotes = SubNotes(editSubNotes.id, selectedDate, subject.text, subNotes.text, photos: editSubNotes.photos);
               BlocProvider.of<NoteCubit>(context).editSubNotes(noteModel, _subNotes, index);
+              widget.funcEdit(subject.text, subNotes.text, selectedDate);
               Navigator.pop(context);
             }
           },

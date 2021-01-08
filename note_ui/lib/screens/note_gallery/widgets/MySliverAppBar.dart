@@ -110,15 +110,20 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                         children: [
                           Align(
                             alignment: Alignment.center,
-                            child: Text(
-                              '${subNotes.subTitle}',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.white,
-                                height: 2,
-                              )
+                            child: Container(
+                              height: expandedHeight,
+                              child: Text(
+                                '${subNotes.subTitle}',
+                                textAlign: TextAlign.left,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 4,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                  height: 2,
+                                )
+                              ),
                             ),
                           ),
                           Align(
