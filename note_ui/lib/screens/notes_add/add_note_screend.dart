@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_ui/screens/home/widgets/inputs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_ui/services/AdMobService.dart';
 import 'package:note_ui/utils/appbar_shape.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
@@ -20,7 +21,7 @@ class _AddNoteScreenState extends State<AddNoteScreen>  {
 
   BannerAd buildBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: AdMobService.bannerAd(),
       size: AdSize.banner,
       listener: (MobileAdEvent event) {
         if(event == MobileAdEvent.loaded) {
@@ -40,12 +41,6 @@ class _AddNoteScreenState extends State<AddNoteScreen>  {
   @override
   void initState () {
     super.initState();
-    targetingInfo = MobileAdTargetingInfo(
-      keywords: <String>['flutterio', 'beautiful apps'],
-      contentUrl: 'https://flutter.io',
-      childDirected: false,
-      testDevices: <String>[], // Android emulators are considered test devices
-    );
 
     myBanner =  buildBannerAd()..load();
   }

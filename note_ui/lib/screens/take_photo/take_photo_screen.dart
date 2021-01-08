@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_common/bloc/note/note_cubit.dart';
 import 'package:note_ui/model/screen_argument.dart';
 import 'package:note_ui/screens/take_photo/widgets/image_card.dart';
+import 'package:note_ui/services/AdMobService.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
 import 'package:uuid/uuid.dart';
@@ -37,7 +38,7 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
 
   InterstitialAd buildBannerAd() {
     return InterstitialAd(
-        adUnitId: InterstitialAd.testAdUnitId,
+        adUnitId: AdMobService.interstitialAd(),
         listener: (MobileAdEvent event) {
           if(event == MobileAdEvent.loaded) {
             if(disposed) {
@@ -71,12 +72,6 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
       });
 
     });
-    targetingInfo = MobileAdTargetingInfo(
-      keywords: <String>['flutterio', 'beautiful apps'],
-      contentUrl: 'https://flutter.io',
-      childDirected: false,
-      testDevices: <String>[], // Android emulators are considered test devices
-    );
     myBanner =  buildBannerAd()..load();
   }
 

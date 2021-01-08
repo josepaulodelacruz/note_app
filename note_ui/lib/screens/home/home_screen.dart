@@ -10,6 +10,7 @@ import 'package:note_common/models/note_model.dart';
 import 'package:note_ui/screens/home/widgets/home_section.dart';
 import 'package:note_ui/screens/home/widgets/navbar.dart';
 import 'package:note_ui/screens/home/widgets/search_section.dart';
+import 'package:note_ui/services/AdMobService.dart';
 import 'package:note_ui/widgets/custom_bottom_appbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   BannerAd buildBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: AdMobService.bannerAd(),
       size: AdSize.banner,
       listener: (MobileAdEvent event) {
         if(event == MobileAdEvent.loaded) {
@@ -79,13 +80,6 @@ class _HomeScreenState extends State<HomeScreen>
         }
       }
     });
-
-   targetingInfo = MobileAdTargetingInfo(
-      keywords: <String>['flutterio', 'beautiful apps'],
-      contentUrl: 'https://flutter.io',
-      childDirected: false,
-      testDevices: <String>[], // Android emulators are considered test devices
-    );
 
     myBanner =  buildBannerAd()..load();
     // this.loadAd();

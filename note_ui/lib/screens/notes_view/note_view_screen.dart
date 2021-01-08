@@ -11,6 +11,7 @@ import 'package:note_common/models/sub_notes.dart';
 import 'package:note_ui/screens/notes_view/widgets/album_section.dart';
 import 'package:note_ui/screens/notes_view/widgets/collections_section.dart';
 import 'package:note_ui/screens/notes_view/widgets/navbar.dart';
+import 'package:note_ui/services/AdMobService.dart';
 import 'package:note_ui/widgets/bottom_modal.dart';
 
 class NoteViewScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
 
   BannerAd buildBannerAd() {
     return BannerAd(
-        adUnitId: BannerAd.testAdUnitId,
+        adUnitId: AdMobService.bannerAd(),
         size: AdSize.banner,
         listener: (MobileAdEvent event) {
           if(event == MobileAdEvent.loaded) {
@@ -74,13 +75,6 @@ class _NoteViewScreenState extends State<NoteViewScreen>{
         }
       }
     });
-
-    targetingInfo = MobileAdTargetingInfo(
-      keywords: <String>['flutterio', 'beautiful apps'],
-      contentUrl: 'https://flutter.io',
-      childDirected: false,
-      testDevices: <String>[], // Android emulators are considered test devices
-    );
 
     myBanner =  buildBannerAd()..load();
   }
