@@ -42,6 +42,7 @@ class _AddNoteScreenState extends State<AddNoteScreen>  {
   void initState () {
     super.initState();
 
+    FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-9536494732518702~5301528021');
     myBanner =  buildBannerAd()..load();
   }
 

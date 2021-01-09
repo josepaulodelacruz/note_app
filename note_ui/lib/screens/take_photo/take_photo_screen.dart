@@ -38,19 +38,19 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
 
   InterstitialAd buildBannerAd() {
     return InterstitialAd(
-        adUnitId: AdMobService.interstitialAd(),
-        listener: (MobileAdEvent event) {
-          if(event == MobileAdEvent.loaded) {
-            if(disposed) {
-              myBanner.dispose();
-            } else {
-              myBanner..show(
-                  anchorType: AnchorType.bottom,
-                  anchorOffset: MediaQuery.of(context).size.height * 0.12
-              );
-            }
+      adUnitId: AdMobService.interstitialAd(),
+      listener: (MobileAdEvent event) {
+        if(event == MobileAdEvent.loaded) {
+          if(disposed) {
+            myBanner.dispose();
+          } else {
+            myBanner..show(
+                anchorType: AnchorType.bottom,
+                anchorOffset: MediaQuery.of(context).size.height * 0.12
+            );
           }
         }
+      }
     );
   }
 
@@ -72,6 +72,7 @@ class _TakePhotoScreen extends State<TakePhotoScreen> {
       });
 
     });
+    FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-9536494732518702~5301528021');
     myBanner =  buildBannerAd()..load();
   }
 

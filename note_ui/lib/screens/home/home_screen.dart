@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
         }
       }
     });
-
+    FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-9536494732518702~5301528021');
     myBanner =  buildBannerAd()..load();
     // this.loadAd();
   }
